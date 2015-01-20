@@ -1,7 +1,7 @@
 {
   "name": "ember-i18next",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "Ember CLI addon that integrates the i18next library.",
   "directories": {
     "doc": "doc",
     "test": "tests"
