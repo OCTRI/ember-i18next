@@ -24,13 +24,14 @@ function initializeLibrary (application) {
   var options = config.i18nOptions || defaultOptions;
 
   window.i18n.init(options, function () {
-    application.set('i18n', window.i18n);
     application.advanceReadiness();
     application.set('locale', 'en');
   });
 }
 
 export function initialize(container, application) {
+  application.set('i18n', window.i18n);
+
   Ember.HTMLBars.registerHelper('t', tHelper);
 
   application.deferReadiness();
