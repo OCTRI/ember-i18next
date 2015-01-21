@@ -18,7 +18,7 @@ function initializeLibrary (application) {
     lng: locale,
     fallbackLng: 'en',
     getAsync: true,
-    resGetpath: baseURL + 'locales/__ns__/__lng__.json'
+    resGetPath: baseURL + 'locales/__ns__/__lng__.json'
   };
 
   var options = config.i18nOptions || defaultOptions;
