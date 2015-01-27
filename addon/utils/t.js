@@ -14,15 +14,11 @@ function T(attributes) {
     var i18n = application.get('i18n');
     var countryCode = application.localeStream.value();
 
-    if (!Ember.isArray(values)) {
-      values = Array.prototype.slice.call(arguments, 1);
-    }
-
     if (!countryCode) {
       countryCode = application.defaultLocale;
     }
 
-    return i18n.t(path);
+    return i18n.t(path, values);
   };
 }
 

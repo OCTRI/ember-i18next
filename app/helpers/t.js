@@ -1,6 +1,6 @@
 import Stream from 'ember-i18next/utils/stream';
 
-export default function tHelper(params) {
+export default function tHelper(params, hash) {
   var path = params.shift();
 
   var container = this.container;
@@ -8,7 +8,7 @@ export default function tHelper(params) {
   var application = container.lookup('application:main');
 
   var stream = new Stream(function() {
-    return t(path, params);
+    return t(path, hash);
   });
 
   // bind any arguments that are Streams
