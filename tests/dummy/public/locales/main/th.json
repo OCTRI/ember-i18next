@@ -1,3 +1,5 @@
 {
-	"test": "thai test output"
+	"test": "thai test output",
+	"testarg": "thai __count__ frog",
+	"testarg_plural": "thai __count__ frogs"
 }
