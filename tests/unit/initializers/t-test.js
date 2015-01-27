@@ -29,52 +29,37 @@ test('i18n is attached to application', function () {
 });
 
 test('t is injected into routes', function () {
-  expect(3);
+  expect(2);
 
-  var TestRoute = Ember.Route.extend({
-    testProp: function() {
-      return this.t(testKey);
-    }.property()
-  });
+  var TestRoute = Ember.Route.extend({});
   container.register('route:test', TestRoute);
 
   var testRouteInstance = container.lookup('route:test');
 
   ok(testRouteInstance.t);
   ok(typeof testRouteInstance.t === 'function');
-  equal(testRouteInstance.get('testProp'), testTranslation);
 });
 
 test('t is injected into controllers', function () {
-  expect(3);
+  expect(2);
 
-  var TestController = Ember.Controller.extend({
-    testProp: function () {
-      return this.t(testKey);
-    }.property()
-  });
+  var TestController = Ember.Controller.extend({});
   container.register('controller:test', TestController);
 
   var testControllerInstance = container.lookup('controller:test');
 
   ok(testControllerInstance.t);
   ok(typeof testControllerInstance.t === 'function');
-  equal(testControllerInstance.get('testProp'), testTranslation);
 });
 
 test('t is injected into components', function () {
-  expect(3);
+  expect(2);
 
-  var TestComponent = Ember.Component.extend({
-    testProp: function () {
-      return this.t(testKey);
-    }.property()
-  });
+  var TestComponent = Ember.Component.extend({});
   container.register('component:test', TestComponent);
 
   var testComponentInstance = container.lookup('component:test');
 
   ok(testComponentInstance.t);
   ok(typeof testComponentInstance.t === 'function');
-  equal(testComponentInstance.get('testProp'), testTranslation);
 });
