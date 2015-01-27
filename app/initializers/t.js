@@ -24,8 +24,10 @@ function initializeLibrary (application) {
   var options = config.i18nOptions || defaultOptions;
 
   window.i18n.init(options, function () {
-    application.advanceReadiness();
-    application.set('locale', 'en');
+    Ember.run(function () {
+      application.advanceReadiness();
+      application.set('locale', 'en');
+    });
   });
 }
 
@@ -43,7 +45,9 @@ export function initialize(container, application) {
     var i18n = application.get('i18n');
     var lang = application.get('locale');
     i18n.setLng(lang, function () {
-      application.localeStream.notify();
+      Ember.run(function () {
+        application.localeStream.notify();
+      });
     });
   });
 
