@@ -5,28 +5,12 @@ import tHelper from '../helpers/t';
 import config from '../config/environment';
 
 function initializeLibrary (application) {
-  var locale = localStorage.locale || config.defaultLocale || 'en';
-  var baseURL = config.baseURL || '/';
-
-  var defaultOptions = {
-    ns: {
-      namespaces: [ 'main' ],
-      defaultNs: 'main'
-    },
-    cookieName: 'locale',
-    preload: [ locale ],
-    lng: locale,
-    fallbackLng: 'en',
-    getAsync: true,
-    resGetPath: baseURL + 'locales/__ns__/__lng__.json'
-  };
-
-  var options = config.i18nOptions || defaultOptions;
+  var options = config.i18nextOptions || {};
 
   window.i18n.init(options, function () {
     Ember.run(function () {
       application.advanceReadiness();
-      application.set('locale', 'en');
+      application.set('locale', window.i18n.lng());
     });
   });
 }

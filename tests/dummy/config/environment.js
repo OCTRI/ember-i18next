@@ -12,10 +12,21 @@ module.exports = function(environment) {
         // e.g. 'with-controller': true
       }
     },
+    defaultLocale: 'en',
+    i18nextOptions: {
+      ns: {
+        namespaces: [ 'main' ],
+        defaultNs: 'main'
+      },
+      cookieName: 'locale',
+      preload: [ 'en' ],
+      lng: 'en',
+      fallbackLng: 'en',
+      getAsync: true,
+      resGetPath: '/locales/__ns__/__lng__.json'
+    },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
     }
   };
 
