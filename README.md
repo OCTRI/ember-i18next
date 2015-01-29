@@ -133,4 +133,4 @@ Contributions are happily accepted. Make sure that your pull request includes te
 
 ## Acknowledgements
 
-The use of streams to update the user interface when the locale is changed is adapted from the [https://github.com/dockyard/ember-cli-i18n](ember-cli-i18n) addon.
+The use of streams to update the user interface when the locale is changed is adapted from the [ember-cli-i18n](https://github.com/dockyard/ember-cli-i18n) addon.
