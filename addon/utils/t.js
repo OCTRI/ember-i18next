@@ -1,10 +1,9 @@
 import Ember from 'ember';
+import { read, readHash } from 'ember-i18next/utils/stream';
 
 var bind = Ember.run.bind;
 
 function T(attributes) {
-  Ember.debug('T attributes:');
-
   for(var key in attributes) {
     this[key] = attributes[key];
   }
@@ -18,7 +17,7 @@ function T(attributes) {
       countryCode = application.defaultLocale;
     }
 
-    return i18n.t(path, values);
+    return i18n.t(read(path), readHash(values));
   };
 }
 
