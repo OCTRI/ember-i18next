@@ -40,3 +40,17 @@ test('Changing locale changes text', function () {
     equal(find('div#translated-with-bound-args').text(), 'thai 1000 frog');
   });
 });
+
+test('Changing bound params changes text', function () {
+  visit('/');
+
+  andThen(function () {
+    equal(find('div#translated-with-bound-args').text(), '1000 frogs');
+  });
+
+  click('a#change-count-link');
+
+  andThen(function () {
+    equal(find('div#translated-with-bound-args').text(), '5000 frogs');
+  });
+});
