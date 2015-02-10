@@ -23,7 +23,8 @@ module.exports = function(environment) {
       lng: 'en',
       fallbackLng: 'en',
       getAsync: true,
-      resGetPath: '/locales/__ns__/__lng__.json'
+      resGetPath: '/locales/__ns__/__lng__.json',
+      debug: true
     },
 
     APP: {

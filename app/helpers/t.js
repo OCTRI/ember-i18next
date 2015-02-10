@@ -1,4 +1,5 @@
 import Stream from 'ember-i18next/utils/stream';
+import { subscribe } from 'ember-i18next/utils/stream';
 
 export default function tHelper(params, hash) {
   var path = params.shift();
@@ -11,19 +12,21 @@ export default function tHelper(params, hash) {
     return t(path, hash);
   });
 
+  var i, l, param, prop;
+
   // bind any arguments that are Streams
-  for (var i = 0, l = params.length; i < l; i++) {
-    var param = params[i];
-    if(param && param.isStream){
-      param.subscribe(stream.notify, stream);
-    }
+  for (i = 0, l = params.length; i < l; i++) {
+    param = params[i];
+    subscribe(param, stream.notify, stream);
   }
 
-  application.localeStream.subscribe(stream.notify, stream);
-
-  if (path.isStream) {
-    path.subscribe(stream.notify, stream);
+  for (prop in hash) {
+    param = hash[prop];
+    subscribe(param, stream.notify, stream);
   }
+
+  subscribe(path, stream.notify, stream);
+  subscribe(application.localeStream, stream.notify, stream);
 
   return stream;
 }

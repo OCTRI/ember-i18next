@@ -16,9 +16,11 @@ function initializeLibrary (application) {
 }
 
 export function initialize(container, application) {
+  var registerHelper = Ember.HTMLBars.registerHelper;
+
   application.set('i18n', window.i18n);
 
-  Ember.HTMLBars.registerHelper('t', tHelper);
+  registerHelper('t', tHelper);
 
   application.deferReadiness();
   application.localeStream = new Stream(function() {
