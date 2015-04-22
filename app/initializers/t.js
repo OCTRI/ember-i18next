@@ -21,6 +21,13 @@ export function initialize(container, application) {
 
   application.set('i18n', window.i18n);
 
+  Ember.debug('=== Ember.Stream ===');
+  Ember.debug(Ember.Stream);
+
+  // Note: We have to do this ourselves for two reasons:
+  // - the helper needs to manipulate the stream itself, so
+  //   Ember.HTMLBars.makeBoundHelper can't be used.
+  // - to avoid having to add a dash to the name
   registerHelper('t', tHelper);
 
   application.deferReadiness();
