@@ -16,7 +16,8 @@ function initializeLibrary (application) {
 }
 
 export function initialize(container, application) {
-  var registerHelper = Ember.HTMLBars.registerHelper;
+  // TODO: investigate a way to avoid using this private method
+  var registerHelper = Ember.HTMLBars._registerHelper;
 
   application.set('i18n', window.i18n);
 
@@ -24,7 +25,7 @@ export function initialize(container, application) {
 
   application.deferReadiness();
   application.localeStream = new Stream(function() {
-    return  application.get('locale');
+    return application.get('locale');
   });
 
   Ember.addObserver(application, 'locale', function() {
