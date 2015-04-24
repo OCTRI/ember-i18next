@@ -20,6 +20,7 @@ For older versions:
 
 ```
 npm install --save-dev ember-i18next
+bower install --save i18next
 ```
 
 ## Configuration
