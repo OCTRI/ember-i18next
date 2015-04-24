@@ -10,7 +10,7 @@ An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js 
 
 ## Installation
 
-To install with Ember CLI 0.2.0 or later (when published to npm):
+To install with Ember CLI 0.2.0 or later:
 
 ```
 ember install:addon ember-i18next
