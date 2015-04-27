@@ -14,15 +14,19 @@ import { subscribe } from 'ember-i18next/utils/stream';
  *
  * @param {Object[]} params - An array of resolved order parameters. The first
  *   element should be the translation key to pass to `t()`.
- * @param {Object} hash - An object containing the hash parameters.
+ * @param {Object} hash - An object containing the hash parameters, used for translation
+ *   substitutions.
+ * @param {Object} options - Not used.
+ * @param {Object} env - The HTMLBars environment in which the helper is running.
  *
  * @return {Stream} a stream that updates its value if the contents of `params`,
  *   the values in `hash`, or the application locale change.
  */
-export default function tHelper(params, hash) {
+export default function tHelper(params, hash, options, env) {
+  var view = env.data.view;
   var path = params.shift();
 
-  var container = this.container;
+  var container = view.container;
   var t = container.lookup('utils:t');
   var application = container.lookup('application:main');
 
