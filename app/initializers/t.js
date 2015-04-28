@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import T from 'ember-i18next/utils/t';
 import Stream from 'ember-i18next/utils/stream';
 import tHelper from '../helpers/t';
 import config from '../config/environment';
@@ -41,11 +40,6 @@ export function initialize(container, application) {
       });
     });
   });
-
-  application.register('utils:t', T);
-  application.inject('route', 't', 'utils:t');
-  application.inject('component', 't', 'utils:t');
-  application.inject('controller', 't', 'utils:t');
 
   initializeLibrary(application);
 }
