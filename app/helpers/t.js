@@ -27,11 +27,11 @@ export default function tHelper(params, hash, options, env) {
   var path = params.shift();
 
   var container = view.container;
-  var t = container.lookup('utils:t');
+  var i18n = container.lookup('service:i18n');
   var application = container.lookup('application:main');
 
   var stream = new Stream(function() {
-    return t(path, hash);
+    return i18n.t(path, hash);
   });
 
   var i, l, param, prop;
