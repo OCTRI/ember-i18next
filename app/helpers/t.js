@@ -28,7 +28,7 @@ export default function tHelper(params, hash, options, env) {
 
   var container = view.container;
   var i18n = container.lookup('service:i18n');
-  var application = container.lookup('application:main');
+  var localeStream = i18n.get('localeStream');
 
   var stream = new Stream(function() {
     return i18n.t(path, hash);
@@ -48,7 +48,7 @@ export default function tHelper(params, hash, options, env) {
   }
 
   subscribe(path, stream.notify, stream);
-  subscribe(application.localeStream, stream.notify, stream);
+  subscribe(localeStream, stream.notify, stream);
 
   return stream;
 }

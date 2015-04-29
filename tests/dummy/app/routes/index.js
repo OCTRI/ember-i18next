@@ -16,8 +16,8 @@ export default Ember.Route.extend(I18nMixin, {
 
   actions: {
     changeLanguage: function () {
-      var app = this.container.lookup('application:main');
-      app.set('locale', 'th');
+      var service = this.get('i18n');
+      service.set('locale', 'th');
     },
 
     changeCount: function () {

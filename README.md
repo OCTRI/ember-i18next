@@ -125,17 +125,16 @@ Pass values to be interpolated into the translation as [hash arguments](http://h
 
 ### Current Locale
 
-The current locale is exposed via a `locale` property added to the main Ember application object. To change the language that the appliction is displayed in, simply set this property, and all of the text displayed using the `t` helper will be updated. For example, triggering the following controller action would update all of the text to Thai:
+The current locale is exposed via a `locale` property added to the i18n service. To change the language that the appliction is displayed in, simply set this property, and all of the text displayed using the `t` helper will be updated. For example, triggering the following controller action would update all of the text to Thai:
 
 ```javascript
 // app/controllers/example-controller.js
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(I18nMixin, {
   actions: {
     gimmeThai: function () {
-      var app = this.container.lookup('application:main');
-      app.set('locale', 'th-TH');
+      this.set('i18n.locale', 'th-TH');
     }
   }
 });

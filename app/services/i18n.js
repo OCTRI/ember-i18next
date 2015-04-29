@@ -1,12 +1,25 @@
 import Ember from 'ember';
 import config from '../config/environment';
+import Stream from 'ember-i18next/utils/stream';
 import { read, readHash } from 'ember-i18next/utils/stream';
 
 /**
  * A service that exposes functionality from i18next.
  */
 var I18nService = Ember.Service.extend({
+  i18next: null,
+  locale: null,
+  localeStream: null,
   isInitialized: false,
+
+  init: function () {
+    Ember.assert(window.i18n, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
+    this.set('i18next', window.i18n);
+
+    this.set('localeStream', new Stream(function () {
+      return this.get('locale');
+    }));
+  },
 
   /**
    * Initializes the i18next library with configuration from the environment.
@@ -15,12 +28,10 @@ var I18nService = Ember.Service.extend({
    *   i18next has finished initializing.
    */
   initLibraryAsync: function () {
-    var application = this.container.lookup('application:main');
+    // var application = this.container.lookup('application:main');
     var options = config.i18nextOptions || {};
-    var i18next = window.i18n;
+    var i18next = this.get('i18next');
     var self = this;
-
-    Ember.assert('i18next was not found. Check your bower.json file.', i18next);
 
     var isThennable = function (obj) {
       return obj && obj.then && typeof obj.then === 'function';
@@ -33,7 +44,7 @@ var I18nService = Ember.Service.extend({
         if (isThennable(initResponse)) {
           initResponse.then(function () {
             self.set('isInitialized', true);
-            application.set('locale', i18next.lng());
+            self.set('locale', i18next.lng());
             resolve(i18next);
           }, function (val) {
             Ember.warn('i18next.init() rejected with value: ' + val);
@@ -45,8 +56,24 @@ var I18nService = Ember.Service.extend({
         }
       });
     }
-
   },
+
+  /**
+   * Notifies the locale stream when the locale is updated, triggering localized
+   * text to update.
+   */
+  observeLocale: Ember.observer('locale', function () {
+    var lang = this.get('locale');
+    var stream = this.get('localeStream');
+    var i18next = this.get('i18next');
+
+    i18next.setLng(lang, function () {
+      Ember.run(function () {
+        Ember.debug('notify locale stream');
+        stream.notify();
+      });
+    });
+  }),
 
   /**
    * A streamified version of the i18next `t()` function.
@@ -59,15 +86,11 @@ var I18nService = Ember.Service.extend({
    * @return Localized text.
    */
   t: function(path, values) {
-    var application = this.container.lookup('application:main');
-    var i18n = application.get('i18n');
-    var countryCode = application.localeStream.value();
+    var i18next = this.get('i18next');
+    var localeStream = this.get('localeStream');
 
-    if (!countryCode) {
-      countryCode = application.defaultLocale;
-    }
-
-    return i18n.t(read(path), readHash(values));
+    localeStream.value(); // pull on the locale stream to trigger update
+    return i18next.t(read(path), readHash(values));
   }
 });
 
