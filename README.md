@@ -74,7 +74,7 @@ In this example, locale files are recursively copied from the application's `app
 
 ### Service
 
-If you need to produce translated strings in routes, components or controllers, you can inject the `i18n` service using the [Ember.inject API](http://emberjs.com/api/classes/Ember.inject.html). This will then give access to the i18next's `t()` function in your code. For example:
+If you need to produce translated strings in routes, components or controllers, you can inject the `i18n` service using the [Ember.inject API](http://emberjs.com/api/classes/Ember.inject.html). This will then give access to i18next's `t()` function in your code. For example:
 
 ```javascript
 // app/components/example-component.js
@@ -82,10 +82,11 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   i18n: Ember.inject.service(),
+  messages: someObject,
 
   messageCount: Ember.computed('messages', function () {
     var i18n = this.get('i18n');
-    var count = messages.get('count');
+    var count = this.get('messages.count');
     return i18n.t('messages.count', { msgCount: count });
   }
 });
@@ -99,8 +100,10 @@ import Ember from 'ember';
 import I18nMixin from 'mixins/i18n';
 
 export default Ember.Component.extend(I18nMixin, {
+  messages: someObject,
+
   messageCount: Ember.computed('messages', function () {
-    var count = messages.get('count');
+    var count = this.get('messages.count');
     return this.t('messages.count', { msgCount: count })
   });
 });
