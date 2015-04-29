@@ -1,18 +1,6 @@
 import Ember from 'ember';
 import Stream from 'ember-i18next/utils/stream';
 import tHelper from '../helpers/t';
-import config from '../config/environment';
-
-function initializeLibrary (application) {
-  var options = config.i18nextOptions || {};
-
-  window.i18n.init(options, function () {
-    Ember.run(function () {
-      application.advanceReadiness();
-      application.set('locale', window.i18n.lng());
-    });
-  });
-}
 
 export function initialize(container, application) {
   // TODO: investigate a way to avoid using this private method
@@ -26,7 +14,6 @@ export function initialize(container, application) {
   // - to avoid having to add a dash to the name
   registerHelper('t', tHelper);
 
-  application.deferReadiness();
   application.localeStream = new Stream(function() {
     return application.get('locale');
   });
@@ -40,8 +27,6 @@ export function initialize(container, application) {
       });
     });
   });
-
-  initializeLibrary(application);
 }
 
 export default {

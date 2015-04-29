@@ -6,10 +6,19 @@ import { read, readHash } from 'ember-i18next/utils/stream';
  * A service that exposes functionality from i18next.
  */
 var I18nService = Ember.Service.extend({
+  isInitialized: false,
+
+  /**
+   * Initializes the i18next library with configuration from the environment.
+   *
+   * @return {Promise} - a promise that resolves with the i18next object when
+   *   i18next has finished initializing.
+   */
   initLibraryAsync: function () {
     var application = this.container.lookup('application:main');
     var options = config.i18nextOptions || {};
     var i18next = window.i18n;
+    var self = this;
 
     Ember.assert('i18next was not found. Check your bower.json file.', i18next);
 
@@ -17,12 +26,13 @@ var I18nService = Ember.Service.extend({
       return obj && obj.then && typeof obj.then === 'function';
     };
 
-    if (!i18next.initialized) {
-      return Ember.RSVP.Promise(function (resolve, reject) {
+    if (!this.get('isInitialized')) {
+      return new Ember.RSVP.Promise(function (resolve, reject) {
         var initResponse = i18next.init(options);
 
         if (isThennable(initResponse)) {
           initResponse.then(function () {
+            self.set('isInitialized', true);
             application.set('locale', i18next.lng());
             resolve(i18next);
           }, function (val) {
@@ -30,7 +40,7 @@ var I18nService = Ember.Service.extend({
             reject(val);
           });
         } else {
-          Ember.warn('The response from i18next.init() was not thennable.');
+          Ember.warn('The response from i18next.init() was not a promise.');
           resolve(i18next);
         }
       });
