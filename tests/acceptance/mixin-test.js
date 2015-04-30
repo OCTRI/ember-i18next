@@ -35,8 +35,6 @@ test('routes with mixin can translate', function(assert) {
 
   andThen(function() {
     var indexRoute = lookup('route:index');
-    /* jshint devel: true */
-    console.log(indexRoute);
     assert.ok(indexRoute);
     testTranslations(assert, indexRoute);
   });

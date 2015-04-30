@@ -4,7 +4,6 @@ import { module, test } from 'qunit';
 
 module('I18nMixin');
 
-// Replace this with your real tests.
 test('it works', function (assert) {
   var I18nObject = Ember.Object.extend(I18nMixin);
   var subject = I18nObject.create();

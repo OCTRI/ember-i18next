@@ -5,7 +5,6 @@ export default Ember.Route.extend(I18nMixin, {
   countObj: Ember.Object.create({ count: 1000 }),
 
   beforeModel: function () {
-    Ember.debug('beforeModel hook in index route');
     var i18next = this.get('i18n');
     return i18next.initLibraryAsync();
   },

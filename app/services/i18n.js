@@ -69,7 +69,6 @@ var I18nService = Ember.Service.extend({
 
     i18next.setLng(lang, function () {
       Ember.run(function () {
-        Ember.debug('notify locale stream');
         stream.notify();
       });
     });
