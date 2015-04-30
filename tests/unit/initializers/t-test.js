@@ -18,13 +18,8 @@ module('initializer:t', {
   }
 });
 
-test('stream is created', function(assert) {
-  assert.expect(2);
-  assert.ok(application.localeStream);
-  assert.ok(application.localeStream.isStream);
-});
-
-test('i18n is attached to application', function(assert) {
+test('helper is registered', function(assert) {
   assert.expect(1);
-  assert.ok(application.i18n);
+  var helper = container.lookup('helper:t');
+  assert.ok(helper);
 });
