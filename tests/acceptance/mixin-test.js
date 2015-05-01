@@ -19,7 +19,7 @@ function testTranslations (assert, subject) {
   testTranslation(assert, subject, 'test', { lng: 'th' }, 'thai test output');
 }
 
-module('Acceptance: Injections', {
+module('Acceptance: Mixin', {
   beforeEach: function() {
     application = startApp();
   },
@@ -30,7 +30,7 @@ module('Acceptance: Injections', {
   }
 });
 
-test('routes can translate', function(assert) {
+test('routes with mixin can translate', function(assert) {
   visit('/');
 
   andThen(function() {
@@ -40,7 +40,7 @@ test('routes can translate', function(assert) {
   });
 });
 
-test('controllers can translate', function(assert) {
+test('controllers with mixin can translate', function(assert) {
   visit('/');
 
   andThen(function () {
@@ -50,7 +50,7 @@ test('controllers can translate', function(assert) {
   });
 });
 
-test('components can translate', function(assert) {
+test('components with mixin can translate', function(assert) {
   visit('/');
 
   andThen(function () {
