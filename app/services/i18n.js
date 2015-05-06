@@ -28,7 +28,6 @@ var I18nService = Ember.Service.extend({
    *   i18next has finished initializing.
    */
   initLibraryAsync: function () {
-    // var application = this.container.lookup('application:main');
     var options = config.i18nextOptions || {};
     var i18next = this.get('i18next');
     var self = this;
@@ -90,6 +89,132 @@ var I18nService = Ember.Service.extend({
 
     localeStream.value(); // pull on the locale stream to trigger update
     return i18next.t(read(path), readHash(values));
+  },
+
+  /**
+   * Forwarded to `i18next.preload()`.
+   */
+  preload: function (langs, callback) {
+    return this.get('i18next').preload(langs, callback);
+  },
+
+  /**
+   * Forwarded to `i18next.addResourceBundle()`.
+   */
+  addResourceBundle: function (lang, ns, resources) {
+    return this.get('i18next').addResourceBundle(lang, ns, resources);
+  },
+
+  /**
+   * Forwarded to `i18next.hasResourceBundle()`.
+   */
+  hasResourceBundle: function (lang, ns) {
+    return this.get('i18next').hasResourceBundle(lang, ns);
+  },
+
+  /**
+   * Forwarded to `i18next.getResourceBundle()`.
+   */
+  getResourceBundle: function (lang, ns) {
+    return this.get('i18next').getResourceBundle(lang, ns);
+  },
+
+  /**
+   * Forwarded to `i18next.removeResourceBundle()`.
+   */
+  removeResourceBundle: function (lang, ns) {
+    return this.get('i18next').removeResourceBundle(lang, ns);
+  },
+
+  /**
+   * Forwarded to `i18next.addResource()`.
+   */
+  addResource: function (lang, ns, key, value) {
+    return this.get('i18next').addResource(lang, ns, key, value);
+  },
+
+  /**
+   * Forwarded to `i18next.addResources()`.
+   */
+  addResources: function (lang, ns, resources) {
+    return this.get('i18next').addResources(lang, ns, resources);
+  },
+
+  /**
+   * Forwarded to `i18next.loadNamespace()`.
+   */
+  loadNamespace: function (ns, callback) {
+    return this.get('i18next').loadNamespace(ns, callback);
+  },
+
+  /**
+   * Forwarded to `i18next.loadNamespaces()`.
+   */
+  loadNamespaces: function (namespaces, callback) {
+    return this.get('i18next').loadNamespaces(namespaces, callback);
+  },
+
+  /**
+   * Forwarded to `i18next.setDefaultNamespace()`.
+   */
+  setDefaultNamespace: function (ns) {
+    return this.get('i18next').setDefaultNamespace(ns);
+  },
+
+  /**
+   * Alias for `t()`.
+   */
+  translate: function (key, values) {
+    return this.t(key, values);
+  },
+
+  /**
+   * Forwarded to `i18next.exists()`.
+   */
+  exists: function (key, options) {
+    return this.get('i18next').exists(key, options);
+  },
+
+  /**
+   * Forwarded to `i18next.detectLanguage()`.
+   */
+  detectLanguage: function () {
+    return this.get('i18next').detectLanguage();
+  },
+
+  /**
+   * Gets i18next's `pluralExtensions` property.
+   */
+  pluralExtensions: Ember.computed('i18next', function () {
+    return this.get('i18next').pluralExtensions;
+  }),
+
+  /**
+   * Gets i18next's `sync` property.
+   */
+  sync: Ember.computed('i18next', function () {
+    return this.get('i18next').sync;
+  }),
+
+  /**
+   * Gets i18next's `functions` property.
+   */
+  functions: Ember.computed('i18next', function () {
+    return this.get('i18next').functions;
+  }),
+
+  /**
+   * Forwarded to `i18next.addPostProcessor()`.
+   */
+  addPostProcessor: function (name, fn) {
+    return this.get('i18next').addPostProcessor(name, fn);
+  },
+
+  /**
+   * Forwarded to `i18next.applyReplacement()`.
+   */
+  applyReplacement: function (str, replacementHash, nestedKey, options) {
+    return this.get('i18next').applyReplacement(str, replacementHash, nestedKey, options);
   }
 });
 
