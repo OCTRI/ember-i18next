@@ -101,8 +101,8 @@ var I18nService = Ember.Service.extend({
   /**
    * Forwarded to `i18next.addResourceBundle()`.
    */
-  addResourceBundle: function (lang, ns, resources) {
-    return this.get('i18next').addResourceBundle(lang, ns, resources);
+  addResourceBundle: function (lang, ns, resources, deep) {
+    return this.get('i18next').addResourceBundle(lang, ns, resources, deep);
   },
 
   /**
