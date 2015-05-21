@@ -12,6 +12,9 @@ var I18nService = Ember.Service.extend({
   localeStream: null,
   isInitialized: false,
 
+  _preInitActions: {},
+  _postInitActions: {},
+
   init: function () {
     Ember.assert(window.i18n, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
     this.set('i18next', window.i18n);
@@ -28,33 +31,59 @@ var I18nService = Ember.Service.extend({
    *   i18next has finished initializing.
    */
   initLibraryAsync: function () {
-    var options = config.i18nextOptions || {};
     var i18next = this.get('i18next');
+    var stream = this.get('localeStream');
     var self = this;
 
-    var isThennable = function (obj) {
-      return obj && obj.then && typeof obj.then === 'function';
-    };
+    var promises = [ this._runPreInitActions(), this._initLibrary(), this._runPostInitActions() ];
 
-    if (!this.get('isInitialized')) {
-      return new Ember.RSVP.Promise(function (resolve, reject) {
-        var initResponse = i18next.init(options);
-
-        if (isThennable(initResponse)) {
-          initResponse.then(function () {
-            self.set('isInitialized', true);
-            self.set('locale', i18next.lng());
-            resolve(i18next);
-          }, function (val) {
-            Ember.warn('i18next.init() rejected with value: ' + val);
-            reject(val);
-          });
-        } else {
-          Ember.warn('The response from i18next.init() was not a promise.');
-          resolve(i18next);
-        }
+    return Ember.RSVP.all(promises).then(function () {
+      self.set('isInitialized', true);
+      self.set('locale', i18next.lng());
+      Ember.run(function () {
+        stream.notify();
       });
-    }
+    }).catch(function (reason) {
+      Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
+    });
+  },
+
+  /**
+   * Registers an action to execute before initializing i18next. Before initializing
+   * the library or setting the language (which reinitializes the library), each of
+   * the registered actions will be executed.
+   *
+   * If any pre-init actions return a promise, the service will wait until all the
+   * promises have settled before initializing i18next.
+   *
+   * @param {String|Object} key -  the key to use to look up the action. May not be
+   *   blank.
+   * @param {Function} fn - a zero-argument callback function. Return a promise if
+   *   the operation needs to complete before the i18next is initialized.
+   */
+  registerPreInitAction: function (key, fn) {
+    Ember.assert('Pre-init action key may not be blank', !Ember.isBlank(key));
+    Ember.assert('A pre-init action must be a function', typeof fn === 'function');
+    this.get('_preInitActions')[key] = fn;
+  },
+
+  /**
+   * Registers an action to execute after initializing i18next. After initializing
+   * the library or setting the language (which reinitializes the library), each of
+   * the registered actions will be executed.
+   *
+   * If any post-init actions return a promise, the service will wait until all the
+   * promises have settled before triggering a UI refresh.
+   *
+   * @param {String|Object} key -  the key to use to look up the action. May not be
+   *   blank.
+   * @param {Function} fn - a zero-argument callback function. Return a promise if
+   *   the operation needs to complete before the the UI is refreshed.
+   */
+  registerPostInitAction: function (name, fn) {
+    Ember.assert('Pre-init action name may not be blank', !Ember.isBlank(name));
+    Ember.assert('A post-init action must be a function', typeof fn === 'function');
+    this.get('_postInitActions')[name] = fn;
   },
 
   /**
@@ -62,14 +91,22 @@ var I18nService = Ember.Service.extend({
    * text to update.
    */
   observeLocale: Ember.observer('locale', function () {
+    var i18next = this.get('i18next');
     var lang = this.get('locale');
     var stream = this.get('localeStream');
-    var i18next = this.get('i18next');
 
-    i18next.setLng(lang, function () {
+    if (i18next && lang && i18next.lng() === lang) {
+      return;
+    }
+
+    var promises = [ this._runPreInitActions(), this._setLng(lang), this._runPostInitActions() ];
+
+    return Ember.RSVP.all(promises).then(function () {
       Ember.run(function () {
         stream.notify();
       });
+    }).catch(function (reason) {
+      Ember.warn('A promise in the locale change path rejected: ' + reason);
     });
   }),
 
@@ -215,6 +252,65 @@ var I18nService = Ember.Service.extend({
    */
   applyReplacement: function (str, replacementHash, nestedKey, options) {
     return this.get('i18next').applyReplacement(str, replacementHash, nestedKey, options);
+  },
+
+  _initLibrary: function () {
+    var self = this;
+
+    var isThennable = function (obj) {
+      return obj && obj.then && typeof obj.then === 'function';
+    };
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      var i18next = self.get('i18next');
+      var options = config.i18nextOptions || {};
+
+      var initResponse = i18next.init(options);
+
+      if (isThennable(initResponse)) {
+        initResponse.then(function () {
+          resolve(i18next);
+        }, function (reason) {
+          reject(reason);
+        });
+      } else {
+        Ember.warn('The response from i18next.init() was not a promise.');
+        resolve(i18next);
+      }
+    });
+  },
+
+  _setLng: function (locale) {
+    var i18next = this.get('i18next');
+    return new Ember.RSVP.Promise(function (resolve) {
+      i18next.setLng(locale, function () {
+        resolve(locale);
+      });
+    });
+  },
+
+  _getActionCallHash: function (actions) {
+    var actionsCallHash = {};
+
+    Ember.keys(actions).forEach(function (key) {
+      actionsCallHash[key] = actions[key].call();
+    });
+
+    return actionsCallHash;
+  },
+
+  _runPreInitActions: function () {
+    var _preInitActions = this.get('_preInitActions');
+    var actionCalls = this._getActionCallHash(_preInitActions);
+
+    return Ember.RSVP.hash(actionCalls, 'ember-i18next: pre init actions');
+  },
+
+  _runPostInitActions: function () {
+    var _postInitActions = this.get('_postInitActions');
+    var actionCalls = this._getActionCallHash(_postInitActions);
+
+    return Ember.RSVP.hash(actionCalls, 'ember-i18next: post init actions');
   }
 });
 
