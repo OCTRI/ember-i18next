@@ -46,3 +46,45 @@ test('setting language triggers post-init actions', function (assert) {
 
   click('a#change-language-link');
 });
+
+test('unregistering pre-init actions', function (assert) {
+  assert.expect(1);
+
+  visit('/');
+
+  andThen(function() {
+    service.registerPreInitAction('removed-pre-init', function () {
+      // should not get here
+      assert.ok(false, 'Setting locale should not trigger unregistered actions');
+    });
+
+    service.registerPreInitAction('test-pre-init', function () {
+      assert.ok(true, 'Setting locale should triggered pre-init actions');
+    });
+
+    service.unregisterPreInitAction('removed-pre-init');
+  });
+
+  click('a#change-language-link');
+});
+
+test('unregistering post-init actions', function (assert) {
+  assert.expect(1);
+
+  visit('/');
+
+  andThen(function () {
+    service.registerPostInitAction('removed-post-init', function () {
+      // should not get here
+      assert.ok(false, 'Setting locale should not trigger unregistered actions');
+    });
+
+    service.registerPostInitAction('test-post-init', function () {
+      assert.ok(true, 'Setting locale should trigger post-init actions.');
+    });
+
+    service.unregisterPostInitAction('removed-post-init');
+  });
+
+  click('a#change-language-link');
+});

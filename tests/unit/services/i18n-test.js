@@ -17,9 +17,13 @@ test('throws when action names are blank', function (assert) {
   var service = this.subject();
 
   assert.throws(function () { service.registerPreInitAction('', function () {}); },
-    'Throws if pre-init action name is blank.');
+    'Throws if registered pre-init action name is blank.');
   assert.throws(function () { service.registerPostInitAction('', function () {}); },
-    'Throws if post-init action name is blank.');
+    'Throws if registered post-init action name is blank.');
+  assert.throws(function() { service.unregisterPreInitAction(''); },
+    'Throws if unregistered pre-init action name is blank.');
+  assert.throws(function () { service.unregisterPostInitAction(''); },
+    'Throws if unregistered post-init action name is blank.');
 });
 
 test('throws when actions are not functions', function (assert) {

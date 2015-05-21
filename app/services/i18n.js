@@ -68,6 +68,19 @@ var I18nService = Ember.Service.extend({
   },
 
   /**
+   * Removes an action from the set of actions executed before initializing i18next.
+   *
+   * @param {String|Object} key - the key to use to look up the action to remove.
+   *   May not be blank.
+   */
+  unregisterPreInitAction: function (key) {
+    Ember.assert('Action key may not be blank', !Ember.isBlank(key));
+    var preInitActions = this.get('_preInitActions');
+
+    delete preInitActions[key];
+  },
+
+  /**
    * Registers an action to execute after initializing i18next. After initializing
    * the library or setting the language (which reinitializes the library), each of
    * the registered actions will be executed.
@@ -85,6 +98,20 @@ var I18nService = Ember.Service.extend({
     Ember.assert('A post-init action must be a function', typeof fn === 'function');
     this.get('_postInitActions')[name] = fn;
   },
+
+  /**
+   * Removes an action from the set of actions executed after initializing i18next.
+   *
+   * @param {String|Object} key - the key to use to look up the action to remove.
+   *   May not be blank.
+   */
+  unregisterPostInitAction: function (key) {
+    Ember.assert('Action key may not be blank', !Ember.isBlank(key));
+    var postInitActions = this.get('_postInitActions');
+
+    delete postInitActions[key];
+  },
+
 
   /**
    * Notifies the locale stream when the locale is updated, triggering localized
