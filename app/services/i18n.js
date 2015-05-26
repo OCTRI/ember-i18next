@@ -31,18 +31,15 @@ var I18nService = Ember.Service.extend({
    *   i18next has finished initializing.
    */
   initLibraryAsync: function () {
-    var i18next = this.get('i18next');
     var stream = this.get('localeStream');
     var self = this;
 
-    var promises = [ this._runPreInitActions(), this._initLibrary(), this._runPostInitActions() ];
-
-    return Ember.RSVP.all(promises).then(function () {
-      self.set('isInitialized', true);
-      self.set('locale', i18next.lng());
-      Ember.run(function () {
-        stream.notify();
-      });
+    return this._runPreInitActions().then(function () {
+      return self._initLibrary();
+    }).then(function () {
+      self._runPostInitActions();
+    }).then(function () {
+      stream.notify();
     }).catch(function (reason) {
       Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
     });
@@ -126,12 +123,13 @@ var I18nService = Ember.Service.extend({
       return;
     }
 
-    var promises = [ this._runPreInitActions(), this._setLng(lang), this._runPostInitActions() ];
-
-    return Ember.RSVP.all(promises).then(function () {
-      Ember.run(function () {
-        stream.notify();
-      });
+    var self = this;
+    return this._runPreInitActions().then(function () {
+      return self._setLng(lang);
+    }).then(function () {
+      return self._runPostInitActions();
+    }).then(function () {
+      stream.notify();
     }).catch(function (reason) {
       Ember.warn('A promise in the locale change path rejected: ' + reason);
     });
@@ -309,8 +307,10 @@ var I18nService = Ember.Service.extend({
 
   _setLng: function (locale) {
     var i18next = this.get('i18next');
+    var options = config.i18nextOptions || {};
+
     return new Ember.RSVP.Promise(function (resolve) {
-      i18next.setLng(locale, function () {
+      i18next.setLng(locale, options, function () {
         resolve(locale);
       });
     });
