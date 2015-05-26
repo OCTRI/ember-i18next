@@ -1,6 +1,6 @@
 {
   "name": "ember-i18next",
-  "version": "0.3.0-beta.1",
+  "version": "0.3.0-beta.2",
   "description": "Ember CLI addon that integrates the i18next library.",
   "directories": {
     "doc": "doc",
