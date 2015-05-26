@@ -18,7 +18,7 @@ module.exports = function(environment) {
         namespaces: [ 'main' ],
         defaultNs: 'main'
       },
-      cookieName: 'locale',
+      useCookie: false,
       preload: [ 'en' ],
       lng: 'en',
       fallbackLng: 'en',

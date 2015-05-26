@@ -14,13 +14,13 @@ export default Ember.Route.extend(I18nMixin, {
   },
 
   actions: {
-    changeLanguage: function () {
+    changeLanguage: function (lang) {
       var service = this.get('i18n');
-      service.set('locale', 'th');
+      service.set('locale', lang);
     },
 
-    changeCount: function () {
-      this.get('countObj').set('count', 5000);
+    changeCount: function (count) {
+      this.get('countObj').set('count', count);
     }
   }
 });

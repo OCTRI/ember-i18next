@@ -23,6 +23,7 @@ test('setting language triggers pre-init actions', function (assert) {
   assert.expect(1);
 
   visit('/');
+  click('a#change-language-en');
 
   andThen(function() {
     service.registerPreInitAction('test-pre-init', function () {
@@ -30,13 +31,14 @@ test('setting language triggers pre-init actions', function (assert) {
     });
   });
 
-  click('a#change-language-link');
+  click('a#change-language-th');
 });
 
 test('setting language triggers post-init actions', function (assert) {
   assert.expect(1);
 
   visit('/');
+  click('a#change-language-en');
 
   andThen(function () {
     service.registerPostInitAction('test-post-init', function () {
@@ -44,13 +46,14 @@ test('setting language triggers post-init actions', function (assert) {
     });
   });
 
-  click('a#change-language-link');
+  click('a#change-language-th');
 });
 
 test('unregistering pre-init actions', function (assert) {
   assert.expect(1);
 
   visit('/');
+  click('a#change-language-en');
 
   andThen(function() {
     service.registerPreInitAction('removed-pre-init', function () {
@@ -65,13 +68,14 @@ test('unregistering pre-init actions', function (assert) {
     service.unregisterPreInitAction('removed-pre-init');
   });
 
-  click('a#change-language-link');
+  click('a#change-language-th');
 });
 
 test('unregistering post-init actions', function (assert) {
   assert.expect(1);
 
   visit('/');
+  click('a#change-language-en');
 
   andThen(function () {
     service.registerPostInitAction('removed-post-init', function () {
@@ -86,5 +90,5 @@ test('unregistering post-init actions', function (assert) {
     service.unregisterPostInitAction('removed-post-init');
   });
 
-  click('a#change-language-link');
+  click('a#change-language-th');
 });
