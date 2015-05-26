@@ -22,6 +22,8 @@ module('Acceptance: Translation', {
 
 test('English translations are correct', function(assert) {
   visit('/');
+  click('a#change-language-en');
+  click('a#change-count-1000');
 
   andThen(function() {
     assert.equal(find('div#translated').text(), 'test output');
@@ -34,7 +36,8 @@ test('English translations are correct', function(assert) {
 
 test('Changing locale changes text', function(assert) {
   visit('/');
-  click('a#change-language-link');
+  click('a#change-language-th');
+  click('a#change-count-1000');
 
   andThen(function () {
     assert.equal(find('div#translated').text(), 'thai test output');
@@ -47,12 +50,14 @@ test('Changing locale changes text', function(assert) {
 
 test('Changing bound params changes text', function(assert) {
   visit('/');
+  click('a#change-language-en');
+  click('a#change-count-1000');
 
   andThen(function () {
     assert.equal(find('div#translated-with-bound-args').text(), '1000 frogs');
   });
 
-  click('a#change-count-link');
+  click('a#change-count-5000');
 
   andThen(function () {
     assert.equal(find('div#translated-with-bound-args').text(), '5000 frogs');

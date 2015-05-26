@@ -3,5 +3,7 @@
 <div id="translated-with-args1">{{t "testarg" count=1}}</div>
 <div id="translated-with-args3">{{t "testarg" count=3}}</div>
 <div id="translated-with-bound-args">{{t "testarg" count=model.count}}</div>
-<div><a id="change-language-link" href="#" {{action 'changeLanguage'}}>Change Language</a></div>
-<div><a id="change-count-link" href="#" {{action 'changeCount'}}>Change Count</a></div>
+<div><a id="change-language-en" href="#" {{action 'changeLanguage' 'en'}}>Use English</a></div>
+<div><a id="change-language-th" href="#" {{action 'changeLanguage''th'}}>Use Thai</a></div>
+<div><a id="change-count-1000" href="#" {{action 'changeCount' 1000}}>Set Count = 1000</a></div>
+<div><a id="change-count-5000" href="#" {{action 'changeCount' 5000}}>Set Count = 5000</a></div>

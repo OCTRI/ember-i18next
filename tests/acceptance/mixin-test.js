@@ -15,7 +15,7 @@ function testTranslation (assert, subject, key, options, expected) {
 }
 
 function testTranslations (assert, subject) {
-  testTranslation(assert, subject, 'test', {}, 'test output');
+  testTranslation(assert, subject, 'test', { lng: 'en' }, 'test output');
   testTranslation(assert, subject, 'test', { lng: 'th' }, 'thai test output');
 }
 
