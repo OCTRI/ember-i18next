@@ -31,6 +31,7 @@ var I18nService = Ember.Service.extend({
    *   i18next has finished initializing.
    */
   initLibraryAsync: function () {
+    var i18next = this.get('i18next');
     var stream = this.get('localeStream');
     var self = this;
 
@@ -39,6 +40,8 @@ var I18nService = Ember.Service.extend({
     }).then(function () {
       self._runPostInitActions();
     }).then(function () {
+      self.set('isInitialized', true);
+      self.set('locale', i18next.lng());
       stream.notify();
     }).catch(function (reason) {
       Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
