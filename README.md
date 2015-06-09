@@ -146,6 +146,37 @@ export default Ember.Controller.extend(I18nMixin, {
 });
 ```
 
+### Pre- and Post-Init Actions
+
+Changing the locale causes i18next to be reinitialized, which can destroy state. For example, if you have used `addResources` to load additional localization strings, they will be lost during initialization. To handle management of state around library initialization, you can register actions to perform before and after library initialization with the i18n service using the `registerPreInitAction` and `registerPostInitAction` methods.
+
+```javascript
+import Ember from 'ember';
+import I18nMixin from '../mixins/i18n';
+
+export default Ember.Route.extend(I18nMixin, {
+  init: function () {
+    this._super();
+    var i18n = this.get('i18n');
+
+    // preload-special is a name that can be used to unregister the action later
+    i18n.registerPostInitAction('preload-special', function () {
+      // do preloading
+    });
+  }
+}
+```
+
+Pre- or post-init actions may return a promise. If any of the actions returns a promise, the service will wait for the promises to resolve before moving on. If pre-init actions return promises, the service will wait for them to resolve before initializing i18next. If post-init actions return promises, the service will wait for them to resolve before notifying the application about the change in locale.
+
+Finally, actions may be unregistered using the `unregisterPreInitAction` and `unregisterPostInitAction` methods. To unregister the post-init action from the previous example, you would do the following:
+
+```javascript
+// ...
+i18n.unregisterPostInitAction('preload-special');
+// ...
+```
+
 ## Collaborating
 
 Contributions are happily accepted. Make sure that your pull request includes tests and your JavaScript source is styled as described in the [Ember.js JavaScript style guide](https://github.com/emberjs/ember.js/blob/master/STYLEGUIDE.md).
