@@ -1,6 +1,6 @@
 {
   "name": "ember-i18next",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Ember CLI addon that integrates the i18next library.",
   "directories": {
     "doc": "doc",
@@ -11,7 +11,7 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "https://github.com/heathharrelson/ember-i18next",
+  "repository": "https://github.com/OCTRI/ember-i18next",
   "engines": {
     "node": ">= 0.10.0"
   },
