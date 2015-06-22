@@ -1,28 +1,47 @@
 import Ember from 'ember';
 import config from '../config/environment';
-import Stream from 'ember-i18next/utils/stream';
-import { read, readHash } from 'ember-i18next/utils/stream';
 
 /**
  * A service that exposes functionality from i18next.
  */
 var I18nService = Ember.Service.extend({
   i18next: null,
-  locale: null,
-  localeStream: null,
   isInitialized: false,
 
+  _locale: null,
   _preInitActions: {},
   _postInitActions: {},
 
   init: function () {
     Ember.assert(window.i18n, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
     this.set('i18next', window.i18n);
-
-    this.set('localeStream', new Stream(function () {
-      return this.get('locale');
-    }));
   },
+
+  /**
+   * The current locale. This is a settable computed property; when set, the locale
+   * will be changed using `i18next.setLng()` and registered pre- and post-init
+   * actions will run. Finally, the locale will change, triggering a refresh of
+   * localized text.
+   */
+  locale: Ember.computed('i18next', '_locale', {
+    get() {
+      return this.get('_locale');
+    },
+    set(key, value) {
+      var lang = value;
+      var self = this;
+
+      if (this.get('isInitialized')) {
+        this._changeLocale(lang).then(function (lang) {
+          self.set('_locale', lang);
+        });
+      } else {
+        this.set('_locale', lang);
+      }
+
+      return lang;
+    }
+  }),
 
   /**
    * Initializes the i18next library with configuration from the environment.
@@ -32,7 +51,6 @@ var I18nService = Ember.Service.extend({
    */
   initLibraryAsync: function () {
     var i18next = this.get('i18next');
-    var stream = this.get('localeStream');
     var self = this;
 
     return this._runPreInitActions().then(function () {
@@ -40,9 +58,8 @@ var I18nService = Ember.Service.extend({
     }).then(function () {
       self._runPostInitActions();
     }).then(function () {
-      self.set('isInitialized', true);
       self.set('locale', i18next.lng());
-      stream.notify();
+      self.set('isInitialized', true);
     }).catch(function (reason) {
       Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
     });
@@ -114,16 +131,17 @@ var I18nService = Ember.Service.extend({
 
 
   /**
-   * Notifies the locale stream when the locale is updated, triggering localized
-   * text to update.
+   * Changes the locale, ensuring that pre- and post-init actions run.
+   *
+   * @param {String} lang - locale code to set.
+   *
+   * @return {Promise} a promise that resolves with the language code when complete.
    */
-  observeLocale: Ember.observer('locale', function () {
+  _changeLocale: function (lang) {
     var i18next = this.get('i18next');
-    var lang = this.get('locale');
-    var stream = this.get('localeStream');
 
     if (i18next && lang && i18next.lng() === lang) {
-      return;
+      return Ember.RSVP.resolve(lang);
     }
 
     var self = this;
@@ -132,28 +150,25 @@ var I18nService = Ember.Service.extend({
     }).then(function () {
       return self._runPostInitActions();
     }).then(function () {
-      stream.notify();
+      return Ember.RSVP.resolve(lang);
     }).catch(function (reason) {
       Ember.warn('A promise in the locale change path rejected: ' + reason);
     });
-  }),
+  },
 
   /**
-   * A streamified version of the i18next `t()` function.
+   * Forwarded to `i18next.t()`.
    *
-   * @param {Object|Stream} path - an object or stream that specifies the translation
-   *   lookup key. Required.
-   * @param {Object|Stream} values - an object or stream that specifies values to
-   *   substitute into the translation for the specified path. Optional.
+   * @param {String} path - an string that specifies the translation lookup key.
+   *   Required.
+   * @param {Object} values - an object that specifies values to substitute into
+   *   the translation for the specified path. Optional.
    *
    * @return Localized text.
    */
   t: function(path, values) {
     var i18next = this.get('i18next');
-    var localeStream = this.get('localeStream');
-
-    localeStream.value(); // pull on the locale stream to trigger update
-    return i18next.t(read(path), readHash(values));
+    return i18next.t(path, values);
   },
 
   /**
