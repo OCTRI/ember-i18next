@@ -31,6 +31,7 @@
     "ember-cli-uglify": "^1.0.1",
     "ember-data": "1.13.0",
     "ember-export-application-global": "^1.0.2",
+    "ember-try": "0.0.7",
     "ember-watson": "^0.4.1"
   },
   "keywords": [
