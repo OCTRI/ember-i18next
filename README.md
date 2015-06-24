@@ -4,7 +4,7 @@
 
 An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js applications using the [i18next](http://i18next.com/) library. The addon provides an Ember service that wraps i18next and a Handlebars helper for displaying localized text in templates.
 
-**Note:** This addon uses the Streams API, which is only present in Ember.js 1.9.0 and later. In particular, it targets the Stream and HTMLBars APIs available in Ember 1.10.0 and later. Earlier releases of Ember are not supported.
+This branch only includes support for Ember.js 1.13 and 2.0. For earlier versions of Ember, see [the latest 0.3.x release](https://github.com/OCTRI/ember-i18next/releases/tag/v0.3.1).
 
 ## Installation
 
