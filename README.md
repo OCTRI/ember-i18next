@@ -1,4 +1,4 @@
-# Ember-i18next
+# Ember-i18next [![Build Status](https://travis-ci.org/OCTRI/ember-i18next.svg)](https://travis-ci.org/OCTRI/ember-i18next)
 
 ## About
 
