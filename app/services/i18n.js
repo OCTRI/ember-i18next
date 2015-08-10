@@ -337,7 +337,7 @@ var I18nService = Ember.Service.extend({
   _getActionCallHash: function (actions) {
     var actionsCallHash = {};
 
-    Ember.keys(actions).forEach(function (key) {
+    Object.keys(actions).forEach(function (key) {
       actionsCallHash[key] = actions[key].call();
     });
 
