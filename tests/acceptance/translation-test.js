@@ -1,6 +1,6 @@
+import Ember from 'ember';
 import {module, test} from 'qunit';
 import startApp from '../helpers/start-app';
-import safeReset from '../helpers/safe-reset';
 
 var application;
 
@@ -9,9 +9,7 @@ module('Acceptance: Translation', {
     application = startApp();
   },
   afterEach: function() {
-    // Rebuild the registry before restarting to work around the following:
-    // https://github.com/emberjs/ember.js/issues/10310
-    safeReset(application);
+    Ember.run(application, 'destroy');
   }
 });
 
