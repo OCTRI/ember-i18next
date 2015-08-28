@@ -4,7 +4,7 @@
 
 An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js applications using the [i18next](http://i18next.com/) library. The addon provides an Ember service that wraps i18next and a Handlebars helper for displaying localized text in templates.
 
-This branch only includes support for Ember.js 1.13 and 2.0. For earlier versions of Ember, see [the latest 0.3.x release](https://github.com/OCTRI/ember-i18next/releases/tag/v0.3.1).
+Ember-i18next 1.0 only includes support for Ember.js 1.13 and 2.0. For earlier versions of Ember, see [the latest 0.3.x release](https://github.com/OCTRI/ember-i18next/releases/tag/v0.3.1).
 
 ## Installation
 
@@ -55,21 +55,25 @@ To initialize the i18next library, call the i18n service's `initLibraryAsync` me
 
 ### Including Locale Files
 
-By default, i18next loads locale files from the server asynchronously from the server path configured using the [`resGetPath`](http://i18next.com/pages/doc_init.html#getresources) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `Brocfile.js`:
+By default, i18next loads locale files from the server asynchronously from the server path configured using the [`resGetPath`](http://i18next.com/pages/doc_init.html#getresources) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `ember-cli-build.js` (`Brocfile.js` in earlier versions of ember-cli):
 
 ```javascript
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var funnel = require('broccoli-funnel');
 
-var app = new EmberApp();
+module.exports = function(defaults) {
+  var app = new EmberApp();
 
-var locales = funnel('app/locales', {
-  srcDir: '/',
-  destDir:  '/locales'
-});
+  var locales = funnel('app/locales', {
+    srcDir: '/',
+    destDir:  '/locales'
+  });
 
-module.exports = app.toTree(locales);
+  // other configuration, app.import() calls, etc. ...
+
+  return app.toTree(locales);
+}
 ```
 
 In this example, locale files are recursively copied from the application's `app/locales/` directory to `dist/locales/` when the application is built.
@@ -157,8 +161,8 @@ export default Ember.Route.extend(I18nMixin, {
     this._super();
     var i18n = this.get('i18n');
 
-    // preload-special is a name that can be used to unregister the action later
-    i18n.registerPostInitAction('preload-special', function () {
+    // my-fancy-action is a name that can be used to unregister the action later
+    i18n.registerPostInitAction('my-fancy-action', function () {
       // do preloading
     });
   }
@@ -171,7 +175,7 @@ Finally, actions may be unregistered using the `unregisterPreInitAction` and `un
 
 ```javascript
 // ...
-i18n.unregisterPostInitAction('preload-special');
+i18n.unregisterPostInitAction('my-fancy-action');
 // ...
 ```
 
@@ -181,4 +185,4 @@ Contributions are happily accepted. Make sure that your pull request includes te
 
 ## Acknowledgements
 
-The use of streams to update the user interface when the locale is changed is adapted from the [ember-cli-i18n](https://github.com/dockyard/ember-cli-i18n) addon.
+Early versions of this addon were strongly influenced by the  [ember-cli-i18n](https://github.com/dockyard/ember-cli-i18n) addon.
