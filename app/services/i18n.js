@@ -145,10 +145,11 @@ var I18nService = Ember.Service.extend({
     }
 
     var self = this;
-    return this._runPreInitActions().then(function () {
+    var oldLang = this._locale;
+    return this._runPreInitActions(lang).then(function () {
       return self._setLng(lang);
     }).then(function () {
-      return self._runPostInitActions();
+      return self._runPostInitActions(oldLang);
     }).then(function () {
       return Ember.RSVP.resolve(lang);
     }).catch(function (reason) {
@@ -334,26 +335,26 @@ var I18nService = Ember.Service.extend({
     });
   },
 
-  _getActionCallHash: function (actions) {
+  _getActionCallHash: function (actions, lang) {
     var actionsCallHash = {};
 
     Object.keys(actions).forEach(function (key) {
-      actionsCallHash[key] = actions[key].call();
+      actionsCallHash[key] = actions[key].call(undefined, lang);
     });
 
     return actionsCallHash;
   },
 
-  _runPreInitActions: function () {
+  _runPreInitActions: function (newLang) {
     var _preInitActions = this.get('_preInitActions');
-    var actionCalls = this._getActionCallHash(_preInitActions);
+    var actionCalls = this._getActionCallHash(_preInitActions, newLang);
 
     return Ember.RSVP.hash(actionCalls, 'ember-i18next: pre init actions');
   },
 
-  _runPostInitActions: function () {
+  _runPostInitActions: function (oldLang) {
     var _postInitActions = this.get('_postInitActions');
-    var actionCalls = this._getActionCallHash(_postInitActions);
+    var actionCalls = this._getActionCallHash(_postInitActions, oldLang);
 
     return Ember.RSVP.hash(actionCalls, 'ember-i18next: post init actions');
   }

@@ -162,7 +162,7 @@ export default Ember.Route.extend(I18nMixin, {
     var i18n = this.get('i18n');
 
     // my-fancy-action is a name that can be used to unregister the action later
-    i18n.registerPostInitAction('my-fancy-action', function () {
+    i18n.registerPostInitAction('my-fancy-action', function (oldLang) {
       // do preloading
     });
   }
@@ -170,6 +170,8 @@ export default Ember.Route.extend(I18nMixin, {
 ```
 
 Pre- or post-init actions may return a promise. If any of the actions returns a promise, the service will wait for the promises to resolve before moving on. If pre-init actions return promises, the service will wait for them to resolve before initializing i18next. If post-init actions return promises, the service will wait for them to resolve before notifying the application about the change in locale.
+
+The new locale is passed as a parameter to pre-init actions and the old locale to post-init actions. These parameters are `undefined` when the the i18n service's `initLibraryAsync` method is called.
 
 Finally, actions may be unregistered using the `unregisterPreInitAction` and `unregisterPostInitAction` methods. To unregister the post-init action from the previous example, you would do the following:
 

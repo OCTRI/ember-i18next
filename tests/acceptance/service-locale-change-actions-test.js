@@ -20,14 +20,15 @@ module('Acceptance: ServiceLocaleChangeActions', {
 });
 
 test('setting language triggers pre-init actions', function (assert) {
-  assert.expect(1);
+  assert.expect(2);
 
   visit('/');
   click('a#change-language-en');
 
   andThen(function() {
-    service.registerPreInitAction('test-pre-init', function () {
+    service.registerPreInitAction('test-pre-init', function (newLang) {
       assert.ok(true, 'Setting locale triggers pre-init action');
+      assert.strictEqual(newLang, 'th', 'Pre-init\'s newLang is "th"');
     });
   });
 
@@ -35,14 +36,15 @@ test('setting language triggers pre-init actions', function (assert) {
 });
 
 test('setting language triggers post-init actions', function (assert) {
-  assert.expect(1);
+  assert.expect(2);
 
   visit('/');
   click('a#change-language-en');
 
   andThen(function () {
-    service.registerPostInitAction('test-post-init', function () {
+    service.registerPostInitAction('test-post-init', function (oldLang) {
       assert.ok(true, 'Setting locale triggers post-init action');
+      assert.strictEqual(oldLang, 'en', 'Post-init\'s oldLang is "en"');
     });
   });
 

@@ -20,20 +20,22 @@ module('Acceptance: ServiceInitActions', {
 });
 
 test('pre-init actions', function (assert) {
-  assert.expect(1);
+  assert.expect(2);
 
-  service.registerPreInitAction('test-pre-init', function () {
+  service.registerPreInitAction('test-pre-init', function (newLang) {
     assert.ok(true, 'Service calls pre-init actions on initLibraryAsync');
+    assert.strictEqual(typeof newLang, 'undefined', 'Pre-init\'s newLang param is undefined on initLibraryAsync');
   });
 
   visit('/test-init');
 });
 
 test('post-init actions', function (assert) {
-  assert.expect(1);
+  assert.expect(2);
 
-  service.registerPostInitAction('test-post-init', function () {
+  service.registerPostInitAction('test-post-init', function (oldLang) {
     assert.ok(true, 'Service calls post-init actions on initLibraryAsync');
+    assert.strictEqual(typeof oldLang, 'undefined', 'Post-init\'s oldLang param is undefined on initLibraryAsync');
   });
 
   visit('/test-init');
