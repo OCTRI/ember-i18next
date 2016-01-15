@@ -4,6 +4,6 @@ module.exports = {
   normalizeEntityName: function () {},
 
   afterInstall: function(options) {
-    return this.addBowerPackageToProject('i18next');
+    return this.addBowerPackageToProject('i18next', '^1.7.0');
   }
 };
