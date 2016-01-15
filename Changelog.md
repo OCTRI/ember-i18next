@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.1 2016/01/15
+
+Specify the version string to add to the bower.json when the addon is installed, preventing broken builds (see issue #25).
+
+## 1.1.0 2015/12/16
+
+Now passes a locale to the pre- and post-init actions, allowing them to perform work that depends on the locale, such as loading or unloading additional resources. The new locale is passed to pre-init actions, and the old locale is passed to post-init actions. See #24 for details. Thanks to @mpirio for making this happen.
+
 ## 1.0.0 2015/08/27
 
 ### Breaking
