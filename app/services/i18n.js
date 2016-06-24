@@ -13,8 +13,9 @@ var I18nService = Ember.Service.extend({
   _postInitActions: {},
 
   init: function () {
-    Ember.assert(window.i18n, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
-    this.set('i18next', window.i18n);
+    Ember.assert(window.i18next, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
+    Ember.assert(window.i18nextXHRBackend, 'i18nextXHRBackend was not found. Check your bower.json file to make sure it is loaded.');
+    this.set('i18next', window.i18next);
   },
 
   /**
@@ -58,7 +59,7 @@ var I18nService = Ember.Service.extend({
     }).then(function () {
       self._runPostInitActions();
     }).then(function () {
-      self.set('locale', i18next.lng());
+      self.set('locale', i18next.language);
       self.set('isInitialized', true);
     }).catch(function (reason) {
       Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
@@ -140,7 +141,7 @@ var I18nService = Ember.Service.extend({
   _changeLocale: function (lang) {
     var i18next = this.get('i18next');
 
-    if (i18next && lang && i18next.lng() === lang) {
+    if (i18next && lang && i18next.language === lang) {
       return Ember.RSVP.resolve(lang);
     }
 
@@ -173,17 +174,10 @@ var I18nService = Ember.Service.extend({
   },
 
   /**
-   * Forwarded to `i18next.preload()`.
-   */
-  preload: function (langs, callback) {
-    return this.get('i18next').preload(langs, callback);
-  },
-
-  /**
    * Forwarded to `i18next.addResourceBundle()`.
    */
-  addResourceBundle: function (lang, ns, resources, deep) {
-    return this.get('i18next').addResourceBundle(lang, ns, resources, deep);
+  addResourceBundle: function (lang, ns, resources, deep, overwrite) {
+    return this.get('i18next').addResourceBundle(lang, ns, resources, deep, overwrite);
   },
 
   /**
@@ -210,8 +204,8 @@ var I18nService = Ember.Service.extend({
   /**
    * Forwarded to `i18next.addResource()`.
    */
-  addResource: function (lang, ns, key, value) {
-    return this.get('i18next').addResource(lang, ns, key, value);
+  addResource: function (lang, ns, key, value, options) {
+    return this.get('i18next').addResource(lang, ns, key, value, options);
   },
 
   /**
@@ -219,13 +213,6 @@ var I18nService = Ember.Service.extend({
    */
   addResources: function (lang, ns, resources) {
     return this.get('i18next').addResources(lang, ns, resources);
-  },
-
-  /**
-   * Forwarded to `i18next.loadNamespace()`.
-   */
-  loadNamespace: function (ns, callback) {
-    return this.get('i18next').loadNamespace(ns, callback);
   },
 
   /**
@@ -257,31 +244,10 @@ var I18nService = Ember.Service.extend({
   },
 
   /**
-   * Forwarded to `i18next.detectLanguage()`.
-   */
-  detectLanguage: function () {
-    return this.get('i18next').detectLanguage();
-  },
-
-  /**
    * Gets i18next's `pluralExtensions` property.
    */
   pluralExtensions: Ember.computed('i18next', function () {
     return this.get('i18next').pluralExtensions;
-  }),
-
-  /**
-   * Gets i18next's `sync` property.
-   */
-  sync: Ember.computed('i18next', function () {
-    return this.get('i18next').sync;
-  }),
-
-  /**
-   * Gets i18next's `functions` property.
-   */
-  functions: Ember.computed('i18next', function () {
-    return this.get('i18next').functions;
   }),
 
   /**
@@ -301,35 +267,33 @@ var I18nService = Ember.Service.extend({
   _initLibrary: function () {
     var self = this;
 
-    var isThennable = function (obj) {
-      return obj && obj.then && typeof obj.then === 'function';
-    };
-
     return new Ember.RSVP.Promise(function (resolve, reject) {
       var i18next = self.get('i18next');
       var options = config.i18nextOptions || {};
 
-      var initResponse = i18next.init(options);
-
-      if (isThennable(initResponse)) {
-        initResponse.then(function () {
-          resolve(i18next);
-        }, function (reason) {
-          reject(reason);
-        });
-      } else {
-        Ember.warn('The response from i18next.init() was not a promise.');
-        resolve(i18next);
-      }
+      //
+      //  TODO:  Adding i18nextXHRBackend by default so that translation
+      //         files can be loaded.
+      //         How do we extend this so that other plugins can be added
+      //         dynamically?
+      //
+      i18next
+        .use(window.i18nextXHRBackend)
+        .init(options, (err, t) => {
+         if ( err ) {
+           reject( err );
+         } else {
+           resolve( i18next );
+         }
+      });
     });
   },
 
   _setLng: function (locale) {
     var i18next = this.get('i18next');
-    var options = config.i18nextOptions || {};
 
     return new Ember.RSVP.Promise(function (resolve) {
-      i18next.setLng(locale, options, function () {
+      i18next.changeLanguage(locale, function () {
         resolve(locale);
       });
     });

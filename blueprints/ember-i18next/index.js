@@ -4,6 +4,9 @@ module.exports = {
   normalizeEntityName: function () {},
 
   afterInstall: function(options) {
-    return this.addBowerPackageToProject('i18next', '^1.7.0');
+    return this.addBowerPackagesToProject([
+                  {name:'i18next-xhr-backend', target:'^0.6.0'},
+                  {name:'i18next', target:'^3.3.1'}
+                ]);
   }
 };

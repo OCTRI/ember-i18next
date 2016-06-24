@@ -1,5 +1,5 @@
 {
 	"test": "test output",
-	"testarg": "__count__ frog",
-	"testarg_plural": "__count__ frogs"
+	"testarg": "{{count}} frog",
+	"testarg_plural": "{{count}} frogs"
 }
