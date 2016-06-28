@@ -125,7 +125,7 @@ You can access your app's translations in templates using the `t` helper:
 <button type="button">{{t 'button.text'}}</button>
 ```
 
-Pass values to be interpolated into the translation as [hash arguments](http://handlebarsjs.com/expressions.html). For example, for a translation that includes an interpolated `__count__` value:
+Pass values to be interpolated into the translation as [hash arguments](http://handlebarsjs.com/expressions.html). For example, for a translation that includes an interpolated `{{count}}` value:
 
 ```handlebars
 <div>{{t 'messages.count' count=3}}</div>

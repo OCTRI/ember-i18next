@@ -280,10 +280,10 @@ var I18nService = Ember.Service.extend({
       i18next
         .use(window.i18nextXHRBackend)
         .init(options, (err, t) => {
-         if ( err ) {
-           reject( err );
+         if (err) {
+           reject(err);
          } else {
-           resolve( i18next );
+           resolve(i18next);
          }
       });
     });
