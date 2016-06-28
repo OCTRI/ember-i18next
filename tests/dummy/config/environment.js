@@ -14,16 +14,15 @@ module.exports = function(environment) {
     },
     defaultLocale: 'en',
     i18nextOptions: {
-      ns: {
-        namespaces: [ 'main' ],
-        defaultNs: 'main'
-      },
+      ns: [ 'main' ],
+      defaultNS: 'main',
       useCookie: false,
-      preload: [ 'en' ],
+      preload: [ 'en', 'th' ],
       lng: 'en',
       fallbackLng: 'en',
-      getAsync: true,
-      resGetPath: '/locales/__ns__/__lng__.json',
+      backend: {
+        loadPath: 'locales/{{ns}}/{{lng}}.json'
+      },
       debug: true
     },
 
