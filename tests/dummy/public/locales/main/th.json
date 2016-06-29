@@ -1,5 +1,6 @@
 {
 	"test": "thai test output",
 	"testarg": "thai {{count}} frog",
-	"testarg_plural": "thai {{count}} frogs"
+	"testarg_plural": "thai {{count}} frogs",
+  "test_with_markup": "thai <b>{{content}}</b>"
 }

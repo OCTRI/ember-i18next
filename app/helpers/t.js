@@ -21,7 +21,7 @@ export default Ember.Helper.extend({
    */
   compute(params, hash) {
     var path = params.shift();
-    return this.get('i18n').t(path, hash);
+    return Ember.String.htmlSafe(this.get('i18n').t(path, hash));
   },
 
   refreshText: Ember.observer('i18n._locale', function () {
