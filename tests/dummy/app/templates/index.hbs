@@ -3,6 +3,8 @@
 <div id="translated-with-args1">{{t "testarg" count=1}}</div>
 <div id="translated-with-args3">{{t "testarg" count=3}}</div>
 <div id="translated-with-bound-args">{{t "testarg" count=model.count}}</div>
+<div id="translated-with-markup">{{t "test_with_markup" content="bold stuff"}}</div>
+<div id="translated-with-markup-malicious">{{t "test_with_markup" content='<script src="evil.js"/>'}}</div>
 <div><a id="change-language-en" href="#" {{action 'changeLanguage' 'en'}}>Use English</a></div>
 <div><a id="change-language-th" href="#" {{action 'changeLanguage''th'}}>Use Thai</a></div>
 <div><a id="change-count-1000" href="#" {{action 'changeCount' 1000}}>Set Count = 1000</a></div>

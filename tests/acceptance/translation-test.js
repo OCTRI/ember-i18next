@@ -56,3 +56,14 @@ test('Changing bound params changes text', function(assert) {
     assert.equal(find('div#translated-with-bound-args').text(), '5000 frogs');
   });
 });
+
+test('Markup is allowed in translation keys but substitutions are escaped', function(assert) {
+  visit('/');
+  click('a#change-language-en');
+
+  andThen(function() {
+    assert.equal(find('div#translated-with-markup b').length, 1, 'there should be a bold tag');
+    assert.equal(find('div#translated-with-markup-malicious script').length, 0,
+      '<script> tag in content should be escaped and not be rendered');
+  });
+});
