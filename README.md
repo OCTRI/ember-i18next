@@ -31,7 +31,7 @@ bower install --save i18next
 
 ### Configuring i18next
 
-To configure the default locale and the [options used to initialize i18next](http://i18next.com/pages/doc_init.html), you can add them to your `environment.js`:
+To configure the default locale and the [options used to initialize i18next](http://i18next.com/docs/options/#init-options), you can add them to your `environment.js`:
 
 ```javascript
 // ...
