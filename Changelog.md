@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0-beta.1 2016/07/07
+
+### Breaking
+
+Updates the i18next dependency to version 3, which contains breaking changes. Review the README.md and [the i18next migration guide](http://i18next.com/docs/migration/) prior to upgrading.
+
+### Changes included
+
+* PR #32: Update to use i18next 3. Thanks to @john-coffey for implementing this.
+* PR #33: Return a safe string from the `{{t}}` helper, allowing translations to contain markup.
+* Miscellaneous code and documentation cleanup: #28, #29, #31, #36.
+
 ## 1.1.1 2016/01/15
 
 Specify the version string to add to the bower.json when the addon is installed, preventing broken builds (see issue #25).
