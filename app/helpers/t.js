@@ -20,7 +20,7 @@ export default Ember.Helper.extend({
    * @return {String} text localized for the current locale.
    */
   compute(params, hash) {
-    var path = params.shift();
+    const path = params.shift();
     return Ember.String.htmlSafe(this.get('i18n').t(path, hash));
   },
 

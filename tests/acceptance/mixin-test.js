@@ -19,10 +19,10 @@ function testTranslations (assert, subject) {
 }
 
 module('Acceptance: Mixin', {
-  beforeEach: function() {
+  beforeEach() {
     application = startApp();
   },
-  afterEach: function() {
+  afterEach() {
     Ember.run(application, 'destroy');
   }
 });
@@ -30,7 +30,7 @@ module('Acceptance: Mixin', {
 test('routes with mixin can translate', function(assert) {
   visit('/');
 
-  andThen(function() {
+  andThen(() => {
     var indexRoute = lookup('route:index');
     assert.ok(indexRoute);
     testTranslations(assert, indexRoute);
@@ -40,7 +40,7 @@ test('routes with mixin can translate', function(assert) {
 test('controllers with mixin can translate', function(assert) {
   visit('/');
 
-  andThen(function () {
+  andThen(() => {
     var controller = lookup('controller:index');
     assert.ok(controller);
     testTranslations(assert, controller);
@@ -50,7 +50,7 @@ test('controllers with mixin can translate', function(assert) {
 test('components with mixin can translate', function(assert) {
   visit('/');
 
-  andThen(function () {
+  andThen(() => {
     var component = lookup('component:t-component');
     assert.ok(component);
     testTranslations(assert, component);

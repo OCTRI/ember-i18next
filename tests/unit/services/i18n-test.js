@@ -9,12 +9,12 @@ moduleFor('service:i18n', {
 });
 
 test('it exists', function(assert) {
-  var service = this.subject();
+  const service = this.subject();
   assert.ok(service);
 });
 
 test('throws when action names are blank', function (assert) {
-  var service = this.subject();
+  const service = this.subject();
 
   assert.throws(function () { service.registerPreInitAction('', function () {}); },
     'Throws if registered pre-init action name is blank.');
@@ -27,7 +27,7 @@ test('throws when action names are blank', function (assert) {
 });
 
 test('throws when actions are not functions', function (assert) {
-  var service = this.subject();
+  const service = this.subject();
 
   assert.throws(function () { service.registerPreInitAction('woo', 'woo'); },
    'Throws if pre-init action is not a function.');
