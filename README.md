@@ -194,6 +194,48 @@ i18n.unregisterPostInitAction('my-fancy-action');
 // ...
 ```
 
+## Testing
+
+### Acceptance Tests
+
+No special configuration is required for acceptance testing, although it may be convenient to configure the default locale and preload locales for use in the tests. For example:
+
+```javascript
+// in environment.js
+if (environment === 'test') {
+  // ...
+  ENV.i18nextOptions.lng = 'en-us';
+  ENV.i18nextOptions.preload = ['en-us', 'th-th'];
+}
+```
+
+### Component Integration Tests
+
+If you need to make assertions about the text rendered in component integration tests, you can [initialize the i18n service in a `beforeEach` hook](https://github.com/OCTRI/ember-i18next/issues/31).
+
+```javascript
+moduleForComponent('some-component', 'Integration | Component | some component', {
+  integration: true,
+
+  beforeEach(assert) {
+    const done = assert.async();
+    this.inject.service('i18n');
+    this.get('i18n').initLibraryAsync().then(done);
+  }
+});
+```
+
+### Unit Tests
+
+Unit tests for objects that inject the i18n service or use the `{{t}}` helper should add them to the `needs` array.
+
+```javascript
+moduleForComponent('other-component', 'Unit | Component | other component', {
+  unit: true,
+  needs: ['service:i18n', 'helper:t'],
+});
+```
+
 ## Collaborating
 
 Contributions are happily accepted. Make sure that your pull request includes tests and your JavaScript source is styled as described in the [Ember.js JavaScript style guide](https://github.com/emberjs/ember.js/blob/master/STYLEGUIDE.md).
