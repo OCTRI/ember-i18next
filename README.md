@@ -4,7 +4,7 @@
 
 An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js applications using the [i18next](http://i18next.com/) library. The addon provides an Ember service that wraps i18next and a Handlebars helper for displaying localized text in templates.
 
-Ember-i18next 1.0 only includes support for Ember.js 1.13 and 2.0. For earlier versions of Ember, see [the latest 0.3.x release](https://github.com/OCTRI/ember-i18next/releases/tag/v0.3.1).
+Ember-i18next 2.0 only supports Ember.js 1.13 and higher.
 
 ## Installation
 
@@ -26,6 +26,19 @@ For older versions:
 npm install --save-dev ember-i18next
 bower install --save i18next
 ```
+
+## Upgrading from ember-i18next 1.X
+
+To upgrade from ember-i18next 1.X, you will need to update the i18next dependency in `bower.json` and add a dependency for the i18next XHR resource loader.
+
+```json
+"dependencies": {
+  "i18next": "^3.3.1",
+  "i18next-xhr-backend": "^0.6.0"
+}
+```
+
+You should review your i18next configuration in `environment.js`, particularly if you have translations with interpolated values. The default interpolation prefix and suffix have changed to `{{`/`}}`, necessitating changes to your JSON files or configuration changes. See the [i18next documentation for interpolation options](http://i18next.com/docs/options/#interpolation-options) and the section of the migration guide on [running with compatibility flags](http://i18next.com/docs/migration/#v1-11-x--v2-0-0-comp).
 
 ## Configuration
 
