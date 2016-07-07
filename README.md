@@ -44,15 +44,17 @@ You should review your i18next configuration in `environment.js`, particularly i
 
 ### Configuring i18next
 
-To configure the default locale and the [options used to initialize i18next](http://i18next.com/docs/options/#init-options), you can add them to your `environment.js`:
+To configure the [i18next options](http://i18next.com/docs/options/#init-options) and the [XHR backend options](https://github.com/i18next/i18next-xhr-backend#backend-options), add them to your `environment.js`:
 
 ```javascript
 // ...
 var ENV = {
   // ...
-  defaultLocale: 'en-US',
   i18nextOptions: {
     // any options supported by i18next
+    backend: {
+      // any options supported by i18next-xhr-backend
+    }
   },
   APP: {
     // ...
