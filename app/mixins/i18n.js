@@ -9,10 +9,10 @@ import Ember from 'ember';
  *   convenience.
  * @see services/i18n
  */
-var I18nMixin = Ember.Mixin.create({
+const I18nMixin = Ember.Mixin.create({
   i18n: Ember.inject.service(),
 
-  t: function (path, values) {
+  t(path, values) {
     return this.get('i18n').t(path, values);
   }
 });

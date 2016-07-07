@@ -93,8 +93,8 @@ export default Ember.Component.extend({
   messages: someObject,
 
   messageCount: Ember.computed('messages', function () {
-    var i18n = this.get('i18n');
-    var count = this.get('messages.count');
+    const i18n = this.get('i18n');
+    const count = this.get('messages.count');
     return i18n.t('messages.count', { msgCount: count });
   }
 });
@@ -111,7 +111,7 @@ export default Ember.Component.extend(I18nMixin, {
   messages: someObject,
 
   messageCount: Ember.computed('messages', function () {
-    var count = this.get('messages.count');
+    const count = this.get('messages.count');
     return this.t('messages.count', { msgCount: count })
   });
 });
@@ -141,7 +141,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend(I18nMixin, {
   actions: {
-    gimmeThai: function () {
+    gimmeThai() {
       this.set('i18n.locale', 'th-TH');
     }
   }
@@ -157,12 +157,12 @@ import Ember from 'ember';
 import I18nMixin from '../mixins/i18n';
 
 export default Ember.Route.extend(I18nMixin, {
-  init: function () {
+  init() {
     this._super();
-    var i18n = this.get('i18n');
+    const i18n = this.get('i18n');
 
     // my-fancy-action is a name that can be used to unregister the action later
-    i18n.registerPostInitAction('my-fancy-action', function (oldLang) {
+    i18n.registerPostInitAction('my-fancy-action', oldLang => {
       // do preloading
     });
   }
