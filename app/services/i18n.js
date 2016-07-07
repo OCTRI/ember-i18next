@@ -60,7 +60,7 @@ const I18nService = Ember.Service.extend({
       this.set('locale', i18next.language);
       this.set('isInitialized', true);
     }).catch(reason => {
-      Ember.warn('A promise in the i18next init chain rejected with value: ' + reason);
+      Ember.Logger.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
     });
   },
 
@@ -151,7 +151,7 @@ const I18nService = Ember.Service.extend({
     }).then(() => {
       return Ember.RSVP.resolve(lang);
     }).catch(reason => {
-      Ember.warn('A promise in the locale change path rejected: ' + reason);
+      Ember.Logger.warn(`A promise in the locale change path rejected with reason: ${reason}`);
     });
   },
 
