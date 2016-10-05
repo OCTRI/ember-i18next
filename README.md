@@ -227,6 +227,8 @@ moduleForComponent('some-component', 'Integration | Component | some component',
 });
 ```
 
+Alternatively, the [ember-i18n-test-helpers addon](https://github.com/thriqon/ember-i18n-test-helpers) is easy to use and also works well with ember-i18next.
+
 ### Unit Tests
 
 Unit tests for objects that inject the i18n service or use the `{{t}}` helper should add them to the `needs` array.

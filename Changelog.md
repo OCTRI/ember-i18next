@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0-beta.2 2016/09/05
+
+### Breaking
+
+Ember-i18next 2 updates the i18next dependency to version 3, which contains breaking changes. Review the README.md and [the i18next migration guide](http://i18next.com/docs/migration/) prior to upgrading.
+
+### Changes included
+
+* PR #41: For compatibility with Ember 2.9, do not modify the positional parameters passed to the `{{t}}` helper.
+
 ## 2.0.0-beta.1 2016/07/07
 
 ### Breaking
