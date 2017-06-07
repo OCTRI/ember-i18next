@@ -16,6 +16,8 @@ const I18nService = Ember.Service.extend({
     Ember.assert(window.i18next, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
     Ember.assert(window.i18nextXHRBackend, 'i18nextXHRBackend was not found. Check your bower.json file to make sure it is loaded.');
     this.set('i18next', window.i18next);
+    this.set('_preInitActions', {});
+    this.set('_postInitActions', {});
   },
 
   /**
@@ -55,10 +57,11 @@ const I18nService = Ember.Service.extend({
     return this._runPreInitActions().then(() => {
       return this._initLibrary();
     }).then(() => {
-      this._runPostInitActions();
+      return this._runPostInitActions();
     }).then(() => {
-      this.set('locale', i18next.language);
+      this.set('_locale', i18next.language);
       this.set('isInitialized', true);
+      return Ember.RSVP.resolve();
     }).catch(reason => {
       Ember.Logger.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
     });

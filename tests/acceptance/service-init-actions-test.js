@@ -1,11 +1,8 @@
-import Ember from 'ember';
-import {
-  module,
-  test
-} from 'qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
+import destroyApp from '../helpers/destroy-app';
 
-var application, container, service;
+let application, container, service;
 
 module('Acceptance: ServiceInitActions', {
   beforeEach: function() {
@@ -15,7 +12,7 @@ module('Acceptance: ServiceInitActions', {
   },
 
   afterEach: function() {
-    Ember.run(application, 'destroy');
+    destroyApp(application);
   }
 });
 
@@ -41,7 +38,7 @@ test('post-init actions', function (assert) {
   visit('/test-init');
 });
 
-test('unregistering pre-int actions', function (assert) {
+test('unregistering pre-init actions', function (assert) {
   assert.expect(1);
 
   service.registerPreInitAction('removed-pre-init', function () {
@@ -58,7 +55,7 @@ test('unregistering pre-int actions', function (assert) {
   visit('/test-init');
 });
 
-test('unregistering post-int actions', function (assert) {
+test('unregistering post-init actions', function (assert) {
   assert.expect(1);
 
   service.registerPostInitAction('removed-post-init', function () {

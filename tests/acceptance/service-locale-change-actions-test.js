@@ -1,11 +1,8 @@
-import Ember from 'ember';
-import {
-  module,
-  test
-} from 'qunit';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
+import destroyApp from '../helpers/destroy-app';
 
-var application, container, service;
+let application, container, service;
 
 module('Acceptance: ServiceLocaleChangeActions', {
   beforeEach() {
@@ -15,7 +12,7 @@ module('Acceptance: ServiceLocaleChangeActions', {
   },
 
   afterEach() {
-    Ember.run(application, 'destroy');
+    destroyApp(application);
   }
 });
 
