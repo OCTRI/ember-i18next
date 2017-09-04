@@ -17,11 +17,13 @@ export default Ember.Helper.extend({
    * @param {Object} hash - an object containing the hash parameters passed to the
    *   helper. Used for translation substitutions.
    *
-   * @return {String} text localized for the current locale.
+   * @return {*} text localized for the current locale.
    */
   compute(params, hash) {
     const path = params[0];
-    return Ember.String.htmlSafe(this.get('i18n').t(path, hash));
+    const res = this.get('i18n').t(path, hash);
+
+    return hash.returnObjects ? res : Ember.String.htmlSafe(res);
   },
 
   refreshText: Ember.observer('i18n._locale', function () {
