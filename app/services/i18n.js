@@ -1,4 +1,7 @@
 import Ember from 'ember';
+import i18next from 'i18next';
+import i18nextXHRBackend from 'i18next-xhr-backend';
+
 import config from '../config/environment';
 
 /**
@@ -13,9 +16,7 @@ const I18nService = Ember.Service.extend({
   _postInitActions: {},
 
   init() {
-    Ember.assert(window.i18next, 'i18next was not found. Check your bower.json file to make sure it is loaded.');
-    Ember.assert(window.i18nextXHRBackend, 'i18nextXHRBackend was not found. Check your bower.json file to make sure it is loaded.');
-    this.set('i18next', window.i18next);
+    this.set('i18next', i18next);
     this.set('_preInitActions', {});
     this.set('_postInitActions', {});
   },
@@ -276,7 +277,7 @@ const I18nService = Ember.Service.extend({
       //         dynamically?
       //
       i18next
-        .use(window.i18nextXHRBackend)
+        .use(i18nextXHRBackend)
         .init(options, (err) => {
          if (err) {
            reject(err);

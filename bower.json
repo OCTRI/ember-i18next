@@ -1,8 +1,0 @@
-{
-  "name": "ember-i18next",
-  "dependencies": {
-    "i18next": "^3.3.1",
-    "jquery": "1.11.3",
-    "i18next-xhr-backend": "^0.6.0"
-  }
-}
