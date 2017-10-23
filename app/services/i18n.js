@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import i18next from 'i18next';
-import i18nextXHRBackend from 'i18next-xhr-backend';
+import i18next from 'npm:i18next';
+import i18nextXHRBackend from 'npm:i18next-xhr-backend';
 
 import config from '../config/environment';
 
