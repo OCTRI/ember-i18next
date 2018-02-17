@@ -1,62 +1,83 @@
 /* eslint-env node */
 module.exports = {
+  useYarn: true,
   scenarios: [
     {
       name: 'ember-release',
-      dependencies: {
-        'ember': 'components/ember#release'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#release'
+        },
+        resolutions: {
+          'ember': 'release'
+        }
       },
-      resolutions: {
-        'ember': 'release'
+      npm: {
+        devDependencies: {
+          'ember-source': null
+        }
       }
     },
     {
       name: 'ember-beta',
-      dependencies: {
-        'ember': 'components/ember#beta'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#beta'
+        },
+        resolutions: {
+          'ember': 'beta'
+        }
       },
-      resolutions: {
-        'ember': 'beta'
+      npm: {
+        devDependencies: {
+          'ember-source': null
+        }
       }
     },
     {
       name: 'ember-canary',
       allowedToFail: true,
-      dependencies: {
-        'ember': 'components/ember#canary'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#canary'
+        },
+        resolutions: {
+          'ember': 'canary'
+        }
       },
-      resolutions: {
-        'ember': 'canary'
+      npm: {
+        devDependencies: {
+          'ember-source': null
+        }
       }
     },
     {
       name: 'ember-1.13',
-      dependencies: {
-        'ember': '1.13.11'
+      bower: {
+        dependencies: {
+          'ember': '1.13.11'
+        }
+      },
+      npm: {
+        devDependencies: {
+          'ember-source': null
+        }
       }
     },
     {
-      name: 'ember-2.0',
-      dependencies: {
-        'ember': '2.0.2'
+      name: 'ember-2.16',
+      npm: {
+        devDependencies: {
+          'ember-source': '~2.16.0'
+        }
       }
     },
     {
-      name: 'ember-2.4',
-      dependencies: {
-        'ember': '~2.4.0'
-      }
-    },
-    {
-      name: 'ember-2.8',
-      dependencies: {
-        'ember': '~2.8.0'
-      }
-    },
-    {
-      name: 'ember-2.12',
-      dependencies: {
-        'ember': '~2.12.0'
+      name: 'ember-2.18',
+      npm: {
+        devDependencies: {
+          'ember-source': '~2.18.0'
+        }
       }
     }
   ]
