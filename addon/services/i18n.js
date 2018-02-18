@@ -1,4 +1,12 @@
-import Ember from 'ember';
+import { isBlank } from '@ember/utils';
+import { assert } from '@ember/debug';
+import {
+  resolve,
+  Promise as EmberPromise,
+  hash
+} from 'rsvp';
+import { computed } from '@ember/object';
+import Service from '@ember/service';
 import i18next from 'i18next';
 import i18nextXHRBackend from 'i18next-xhr-backend';
 
@@ -7,13 +15,13 @@ import config from 'ember-i18next/configuration';
 /**
  * A service that exposes functionality from i18next.
  */
-const I18nService = Ember.Service.extend({
+const I18nService = Service.extend({
   i18next: null,
   isInitialized: false,
 
   _locale: null,
-  _preInitActions: {},
-  _postInitActions: {},
+  _preInitActions: null,
+  _postInitActions: null,
 
   init() {
     this.set('i18next', i18next);
@@ -27,7 +35,7 @@ const I18nService = Ember.Service.extend({
    * actions will run. Finally, the locale will change, triggering a refresh of
    * localized text.
    */
-  locale: Ember.computed('i18next', '_locale', {
+  locale: computed('i18next', '_locale', {
     get() {
       return this.get('_locale');
     },
@@ -62,9 +70,10 @@ const I18nService = Ember.Service.extend({
     }).then(() => {
       this.set('_locale', i18next.language);
       this.set('isInitialized', true);
-      return Ember.RSVP.resolve();
+      return resolve();
     }).catch(reason => {
-      Ember.Logger.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
+      // eslint-disable-next-line no-console
+      console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
     });
   },
 
@@ -82,8 +91,8 @@ const I18nService = Ember.Service.extend({
    *   the operation needs to complete before the i18next is initialized.
    */
   registerPreInitAction(key, fn) {
-    Ember.assert('Pre-init action key may not be blank', !Ember.isBlank(key));
-    Ember.assert('A pre-init action must be a function', typeof fn === 'function');
+    assert('Pre-init action key may not be blank', !isBlank(key));
+    assert('A pre-init action must be a function', typeof fn === 'function');
     this.get('_preInitActions')[key] = fn;
   },
 
@@ -94,7 +103,7 @@ const I18nService = Ember.Service.extend({
    *   May not be blank.
    */
   unregisterPreInitAction(key) {
-    Ember.assert('Action key may not be blank', !Ember.isBlank(key));
+    assert('Action key may not be blank', !isBlank(key));
     const preInitActions = this.get('_preInitActions');
 
     delete preInitActions[key];
@@ -114,8 +123,8 @@ const I18nService = Ember.Service.extend({
    *   the operation needs to complete before the the UI is refreshed.
    */
   registerPostInitAction(name, fn) {
-    Ember.assert('Pre-init action name may not be blank', !Ember.isBlank(name));
-    Ember.assert('A post-init action must be a function', typeof fn === 'function');
+    assert('Pre-init action name may not be blank', !isBlank(name));
+    assert('A post-init action must be a function', typeof fn === 'function');
     this.get('_postInitActions')[name] = fn;
   },
 
@@ -126,7 +135,7 @@ const I18nService = Ember.Service.extend({
    *   May not be blank.
    */
   unregisterPostInitAction(key) {
-    Ember.assert('Action key may not be blank', !Ember.isBlank(key));
+    assert('Action key may not be blank', !isBlank(key));
     const postInitActions = this.get('_postInitActions');
 
     delete postInitActions[key];
@@ -144,7 +153,7 @@ const I18nService = Ember.Service.extend({
     const i18next = this.get('i18next');
 
     if (i18next && lang && i18next.language === lang) {
-      return Ember.RSVP.resolve(lang);
+      return resolve(lang);
     }
 
     const oldLang = this._locale;
@@ -153,9 +162,10 @@ const I18nService = Ember.Service.extend({
     }).then(() => {
       return this._runPostInitActions(oldLang);
     }).then(() => {
-      return Ember.RSVP.resolve(lang);
+      return resolve(lang);
     }).catch(reason => {
-      Ember.Logger.warn(`A promise in the locale change path rejected with reason: ${reason}`);
+      // eslint-disable-next-line no-console
+      console.warn(`A promise in the locale change path rejected with reason: ${reason}`);
     });
   },
 
@@ -247,7 +257,7 @@ const I18nService = Ember.Service.extend({
   /**
    * Gets i18next's `pluralExtensions` property.
    */
-  pluralExtensions: Ember.computed('i18next', function () {
+  pluralExtensions: computed('i18next', function () {
     return this.get('i18next').pluralExtensions;
   }),
 
@@ -266,7 +276,7 @@ const I18nService = Ember.Service.extend({
   },
 
   _initLibrary() {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new EmberPromise((resolve, reject) => {
       const i18next = this.get('i18next');
       const options = config.i18nextOptions || {};
 
@@ -291,7 +301,7 @@ const I18nService = Ember.Service.extend({
   _setLng(locale) {
     const i18next = this.get('i18next');
 
-    return new Ember.RSVP.Promise(resolve => {
+    return new EmberPromise(resolve => {
       i18next.changeLanguage(locale, () => {
         resolve(locale);
       });
@@ -312,14 +322,14 @@ const I18nService = Ember.Service.extend({
     const _preInitActions = this.get('_preInitActions');
     const actionCalls = this._getActionCallHash(_preInitActions, newLang);
 
-    return Ember.RSVP.hash(actionCalls, 'ember-i18next: pre init actions');
+    return hash(actionCalls, 'ember-i18next: pre init actions');
   },
 
   _runPostInitActions(oldLang) {
     const _postInitActions = this.get('_postInitActions');
     const actionCalls = this._getActionCallHash(_postInitActions, oldLang);
 
-    return Ember.RSVP.hash(actionCalls, 'ember-i18next: post init actions');
+    return hash(actionCalls, 'ember-i18next: post init actions');
   }
 });
 

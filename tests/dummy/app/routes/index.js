@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import Route from '@ember/routing/route';
 import I18nMixin from '../mixins/i18n';
 
-export default Ember.Route.extend(I18nMixin, {
-  countObj: Ember.Object.create({ count: 1000 }),
+export default Route.extend(I18nMixin, {
+  countObj: EmberObject.create({ count: 1000 }),
 
   beforeModel() {
     const i18next = this.get('i18n');

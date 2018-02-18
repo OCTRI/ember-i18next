@@ -1,11 +1,14 @@
-import Ember from 'ember';
+import { observer } from '@ember/object';
+import { htmlSafe } from '@ember/string';
+import { inject as service } from '@ember/service';
+import Helper from '@ember/component/helper';
 
 /**
  * An HTMLBars helper function that exposes the i18next `t()` function. Automatically
  * refreshes the translated text if the application's selected locale changes.
  */
-export default Ember.Helper.extend({
-  i18n: Ember.inject.service(),
+export default Helper.extend({
+  i18n: service(),
 
   /**
    * @private
@@ -23,10 +26,10 @@ export default Ember.Helper.extend({
     const path = params[0];
     const res = this.get('i18n').t(path, hash);
 
-    return hash.returnObjects ? res : Ember.String.htmlSafe(res);
+    return hash.returnObjects ? res : htmlSafe(res);
   },
 
-  refreshText: Ember.observer('i18n._locale', function () {
+  refreshText: observer('i18n._locale', function () {
     this.recompute();
   })
 });
