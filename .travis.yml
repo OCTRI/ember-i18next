@@ -4,29 +4,26 @@ node_js:
   - "6"
 
 sudo: false
+dist: trusty
 
-cache:
-  directories:
-    - $HOME/.npm
+addons:
+  chrome: stable
+
+cache: yarn
 
 env:
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
-  - EMBER_TRY_SCENARIO=ember-2.12
+  - EMBER_TRY_SCENARIO=ember-2.18
 
 matrix:
   fast_finish: true
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
-before_install:
-  - npm config set spin false
-  - npm install -g phantomjs-prebuilt
-  - phantomjs --version
-
 install:
-  - npm install
+  - yarn
 
 script:
-  - ember try:one $EMBER_TRY_SCENARIO
+  - ember try:one $EMBER_TRY_SCENARIO --- ember test -c testem-travis.js
