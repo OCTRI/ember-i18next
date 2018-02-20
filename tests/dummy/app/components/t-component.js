@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import I18nMixin from '../mixins/i18n';
 
-export default Ember.Component.extend(I18nMixin, {});
+export default Component.extend(I18nMixin, {});

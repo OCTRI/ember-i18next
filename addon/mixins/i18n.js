@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import Mixin from '@ember/object/mixin';
 
 /**
  * Mixes internationalization (i18n) functionality from the i18next library into
@@ -9,8 +10,8 @@ import Ember from 'ember';
  *   convenience.
  * @see services/i18n
  */
-const I18nMixin = Ember.Mixin.create({
-  i18n: Ember.inject.service(),
+const I18nMixin = Mixin.create({
+  i18n: service(),
 
   t(path, values) {
     return this.get('i18n').t(path, values);

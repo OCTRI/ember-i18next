@@ -1,5 +1,5 @@
-import Ember from 'ember';
-import {module, test} from 'qunit';
+import { run } from '@ember/runloop';
+import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 let application;
@@ -9,7 +9,7 @@ module('Acceptance: Translation', {
     application = startApp();
   },
   afterEach() {
-    Ember.run(application, 'destroy');
+    run(application, 'destroy');
   }
 });
 
