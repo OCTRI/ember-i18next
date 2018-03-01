@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0 2018/03/01
+
+Updates dependencies and uses the [Ember.js modules API introduced in Ember 2.16](https://emberjs.com/blog/2017/10/11/ember-2-16-released.html).
+
+### Breaking
+
+ember-i18next 2.0.0 updates the i18next dependency to version 10, which contains breaking changes. Review the README.md and [the i18next migration guide](https://www.i18next.com/misc/migration-guide.html) prior to upgrading.
+
+### Changes included
+
+* PR #45: Remove use of Bower.
+* PR #47: Remove use of Browserify.
+* PR #48: Move code to the `addon` directory.
+* PR #50: Update dependencies and use the new Ember modules API.
+
 ## 2.0.0-beta.2 2016/09/05
 
 ### Breaking
