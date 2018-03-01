@@ -1,10 +1,10 @@
-# Ember-i18next [![Build Status](https://travis-ci.org/OCTRI/ember-i18next.svg)](https://travis-ci.org/OCTRI/ember-i18next)
+# ember-i18next [![Build Status](https://travis-ci.org/OCTRI/ember-i18next.svg)](https://travis-ci.org/OCTRI/ember-i18next)
 
 ## About
 
 An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js applications using the [i18next](http://i18next.com/) library. The addon provides an Ember service that wraps i18next and a Handlebars helper for displaying localized text in templates.
 
-Ember-i18next 2.0 only supports Ember.js 1.13 and higher.
+ember-i18next 2.0 only supports Ember.js 1.13 and higher.
 
 ## Installation
 
@@ -24,31 +24,29 @@ For older versions:
 
 ```bash
 npm install --save-dev ember-i18next
-bower install --save i18next
 ```
 
 ## Upgrading from ember-i18next 1.X
 
-To upgrade from ember-i18next 1.X, you will need to update the i18next dependency in `bower.json` and add a dependency for the i18next XHR resource loader.
+Bower is no longer used to install i18next. If you are still using Bower with your Ember app,  you will need to remove the i18next dependency from `bower.json`.
 
-```json
+```diff
 "dependencies": {
-  "i18next": "^3.3.1",
-  "i18next-xhr-backend": "^0.6.0"
+-  "i18next": "^3.3.1",
 }
 ```
 
-You should review your i18next configuration in `environment.js`, particularly if you have translations with interpolated values. The default interpolation prefix and suffix have changed to `{{`/`}}`, necessitating changes to your JSON files or configuration changes. See the [i18next documentation for interpolation options](http://i18next.com/docs/options/#interpolation-options) and the section of the migration guide on [running with compatibility flags](http://i18next.com/docs/migration/#v1-11-x--v2-0-0-comp).
+You should review your i18next configuration in `environment.js`, particularly if you have translations with interpolated values. The default interpolation prefix and suffix have changed to `{{`/`}}`, necessitating changes to your JSON files or configuration changes. See the [i18next documentation for interpolation options](https://www.i18next.com/interpolation.html#additional-options).
 
 ## Configuration
 
 ### Configuring i18next
 
-To configure the [i18next options](http://i18next.com/docs/options/#init-options) and the [XHR backend options](https://github.com/i18next/i18next-xhr-backend#backend-options), add them to your `environment.js`:
+To configure the [i18next options](https://www.i18next.com/configuration-options.html) and the [XHR backend options](https://github.com/i18next/i18next-xhr-backend#backend-options), add them to your `environment.js`:
 
 ```javascript
 // ...
-var ENV = {
+let ENV = {
   // ...
   i18nextOptions: {
     // any options supported by i18next
@@ -66,23 +64,24 @@ If you do not specify any options, the default i18next options will be used.
 
 ### Initializing i18next
 
-To initialize the i18next library, call the i18n service's `initLibraryAsync` method. This method returns a promise that resolves when the library finishes initializing, so if you call it in one of the model hook methods (`beforeModel`, `model`, `afterModel`), the application will enter the loading substate until i18next is initialized.
+To initialize the i18next library, call the i18n service's `initLibraryAsync` method. This method returns a promise that resolves when the library finishes initializing, so if you call it in one of the model hook methods (`beforeModel`, `model`, `afterModel`), the application will enter the loading substate until i18next is initialized. The application route may be a good place to do this.
 
 ### Including Locale Files
 
-By default, i18next loads locale files from the server asynchronously from the server path configured using the [`resGetPath`](http://i18next.com/pages/doc_init.html#getresources) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `ember-cli-build.js` (`Brocfile.js` in earlier versions of ember-cli):
+By default, i18next loads locale files from the server asynchronously from the server path configured using the XHR backend's [`loadPath`](https://github.com/i18next/i18next-xhr-backend#backend-options) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `ember-cli-build.js` (`Brocfile.js` in earlier versions of ember-cli):
 
 ```javascript
-/* global require, module */
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
-var funnel = require('broccoli-funnel');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const funnel = require('broccoli-funnel');
 
 module.exports = function(defaults) {
-  var app = new EmberApp();
+  const app = new EmberApp(defaults, {
+    // build options
+  });
 
-  var locales = funnel('app/locales', {
+  const locales = funnel('app/locales', {
     srcDir: '/',
-    destDir:  '/locales'
+    destDir: '/locales'
   });
 
   // other configuration, app.import() calls, etc. ...
@@ -91,23 +90,25 @@ module.exports = function(defaults) {
 }
 ```
 
-In this example, locale files are recursively copied from the application's `app/locales/` directory to `dist/locales/` when the application is built.
+In this example, [Broccoli Funnel](https://github.com/broccolijs/broccoli-funnel) recursively copies locale files from the application's `app/locales/` directory to `dist/locales/` when the application is built.
 
 ## Use
 
 ### Service
 
-If you need to produce translated strings in routes, components or controllers, you can inject the `i18n` service using the [Ember.inject API](http://emberjs.com/api/classes/Ember.inject.html). This will then give access to i18next's `t()` function in your code. For example:
+If you need to produce translated strings in routes, components or controllers, you can [inject the `i18n` service](https://guides.emberjs.com/v2.18.0/applications/dependency-injection/#toc_ad-hoc-injections). This will then give access to [i18next's `t()` function](https://www.i18next.com/essentials.html) in your code. For example:
 
 ```javascript
 // app/components/example-component.js
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 
-export default Ember.Component.extend({
-  i18n: Ember.inject.service(),
+export default Component.extend({
+  i18n: service(),
   messages: someObject,
 
-  messageCount: Ember.computed('messages', function () {
+  messageCount: computed('messages', function () {
     const i18n = this.get('i18n');
     const count = this.get('messages.count');
     return i18n.t('messages.count', { msgCount: count });
@@ -119,13 +120,15 @@ For convenience, a mixin is provided that injects the i18n service and adds a `t
 
 ```javascript
 // app/components/example-component.js
-import Ember from 'ember';
-import I18nMixin from 'mixins/i18n';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-export default Ember.Component.extend(I18nMixin, {
+import I18nMixin from 'ember-i18next/mixins/i18n';
+
+export default Component.extend(I18nMixin, {
   messages: someObject,
 
-  messageCount: Ember.computed('messages', function () {
+  messageCount: computed('messages', function () {
     const count = this.get('messages.count');
     return this.t('messages.count', { msgCount: count })
   });
@@ -143,20 +146,21 @@ You can access your app's translations in templates using the `t` helper:
 Pass values to be interpolated into the translation as [hash arguments](http://handlebarsjs.com/expressions.html). For example, for a translation that includes an interpolated `{{count}}` value:
 
 ```handlebars
-<div>{{t 'messages.count' count=3}}</div>
+<div>{{t 'messages.count' count=model.messageCount}}</div>
 ```
 
 ### Current Locale
 
-The current locale is exposed via a `locale` property added to the i18n service. To change the language that the appliction is displayed in, simply set this property, and all of the text displayed using the `t` helper will be updated. For example, triggering the following controller action would update all of the text to Thai:
+The current locale is exposed via i18n service's `locale` property. To change the language that the application is displayed in, simply set this property, and all of the text displayed using the `t` helper will be updated. For example, triggering the following controller action would update all of the text to Thai:
 
 ```javascript
 // app/controllers/example-controller.js
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import I18nMixin from 'ember-i18next/mixins/i18n';
 
-export default Ember.Controller.extend(I18nMixin, {
+export default Controller.extend(I18nMixin, {
   actions: {
-    gimmeThai() {
+    showThai() {
       this.set('i18n.locale', 'th-TH');
     }
   }
@@ -168,10 +172,10 @@ export default Ember.Controller.extend(I18nMixin, {
 Changing the locale causes i18next to be reinitialized, which can destroy state. For example, if you have used `addResources` to load additional localization strings, they will be lost during initialization. To handle management of state around library initialization, you can register actions to perform before and after library initialization with the i18n service using the `registerPreInitAction` and `registerPostInitAction` methods.
 
 ```javascript
-import Ember from 'ember';
-import I18nMixin from '../mixins/i18n';
+import Route from '@ember/routing/route';
+import I18nMixin from 'ember-i18next/mixins/i18n';
 
-export default Ember.Route.extend(I18nMixin, {
+export default Route.extend(I18nMixin, {
   init() {
     this._super();
     const i18n = this.get('i18n');
@@ -206,8 +210,8 @@ No special configuration is required for acceptance testing, although it may be 
 // in environment.js
 if (environment === 'test') {
   // ...
-  ENV.i18nextOptions.lng = 'en-us';
-  ENV.i18nextOptions.preload = ['en-us', 'th-th'];
+  ENV.i18nextOptions.lng = 'en-US';
+  ENV.i18nextOptions.preload = ['en-US', 'th-TH'];
 }
 ```
 
