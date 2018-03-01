@@ -210,8 +210,8 @@ No special configuration is required for acceptance testing, although it may be 
 // in environment.js
 if (environment === 'test') {
   // ...
-  ENV.i18nextOptions.lng = 'en-us';
-  ENV.i18nextOptions.preload = ['en-us', 'th-th'];
+  ENV.i18nextOptions.lng = 'en-US';
+  ENV.i18nextOptions.preload = ['en-US', 'th-TH'];
 }
 ```
 
