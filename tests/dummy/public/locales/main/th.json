@@ -2,5 +2,7 @@
 	"test": "thai test output",
 	"testarg": "thai {{count}} frog",
 	"testarg_plural": "thai {{count}} frogs",
-  "test_with_markup": "thai <b>{{content}}</b>"
+  "test_with_markup": "thai <b>{{content}}</b>",
+  "macro_no_interpolations": "thai text with no interpolations",
+  "macro_with_interpolations": "thai Clicks: {{clicks}}"
 }

@@ -2,5 +2,7 @@
 	"test": "test output",
 	"testarg": "{{count}} frog",
 	"testarg_plural": "{{count}} frogs",
-  "test_with_markup": "<b>{{content}}</b>"
+  "test_with_markup": "<b>{{content}}</b>",
+  "macro_no_interpolations": "text with no interpolations",
+  "macro_with_interpolations": "Clicks: {{clicks}}"
 }
