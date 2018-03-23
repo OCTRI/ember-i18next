@@ -15,7 +15,7 @@ module.exports = function() {
           name: 'ember-1.13',
           bower: {
             dependencies: {
-              'ember': '1.13.11'
+              'ember': '1.13.13'
             }
           },
           npm: {
