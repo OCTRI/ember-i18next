@@ -24,6 +24,7 @@ const I18nService = Service.extend({
   _postInitActions: null,
 
   init() {
+    this._super(...arguments);
     this.set('i18next', i18next);
     this.set('_preInitActions', {});
     this.set('_postInitActions', {});
