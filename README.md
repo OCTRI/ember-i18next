@@ -149,6 +149,29 @@ Pass values to be interpolated into the translation as [hash arguments](http://h
 <div>{{t 'messages.count' count=model.messageCount}}</div>
 ```
 
+### Macro
+
+You can create computed properties that watch for locale changes:
+
+```js
+import { translationMacro as t } from "ember-i18next";
+
+export default Ember.Component.extend({
+  // A simple translation.
+  title: t('user.edit.title'),
+
+  followersCount: 1,
+  count: Ember.computed.alias('followersCount'),
+
+  // A translation with interpolations. This computed property
+  // depends on `count` and will send `{ count: this.get('count') }`
+  // in to the translation.
+  followersTitle: t('user.followers.title', 'count')
+});
+```
+
+The macro relies on this.get('i18n') being the `service:i18n`. Make sure it is injected somehow.
+
 ### Current Locale
 
 The current locale is exposed via i18n service's `locale` property. To change the language that the application is displayed in, simply set this property, and all of the text displayed using the `t` helper will be updated. For example, triggering the following controller action would update all of the text to Thai:
