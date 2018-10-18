@@ -1,4 +1,5 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
 const mockI18next = {
   use() {
@@ -12,136 +13,135 @@ const mockI18next = {
   }
 };
 
-moduleFor('service:i18n', {
-  // Specify the other units that are required for this test.
-  // needs: ['service:foo']
-});
+module('service:i18n', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  const service = this.subject();
-  assert.ok(service);
-});
-
-test('throws when action names are blank', function (assert) {
-  const service = this.subject();
-
-  assert.throws(function () { service.registerPreInitAction('', function () {}); },
-    'Throws if registered pre-init action name is blank.');
-  assert.throws(function () { service.registerPostInitAction('', function () {}); },
-    'Throws if registered post-init action name is blank.');
-  assert.throws(function() { service.unregisterPreInitAction(''); },
-    'Throws if unregistered pre-init action name is blank.');
-  assert.throws(function () { service.unregisterPostInitAction(''); },
-    'Throws if unregistered post-init action name is blank.');
-});
-
-test('throws when actions are not functions', function (assert) {
-  const service = this.subject();
-
-  assert.throws(function () { service.registerPreInitAction('woo', 'woo'); },
-   'Throws if pre-init action is not a function.');
-  assert.throws(function () { service.registerPostInitAction('woo', 'hoo'); },
-    'Throws if post-init action is not a function.');
-});
-
-test('initLibraryAsync triggers pre-init actions', function (assert) {
-  const service = this.subject();
-  service.set('i18next', mockI18next);
-
-  service.registerPreInitAction('removed-pre-init', function () {
-    // should never get here
-    assert.ok(false, 'Service should not call unregistered actions on init.');
+  test('it exists', function(assert) {
+    const service = this.owner.lookup('service:i18n');
+    assert.ok(service);
   });
 
-  service.registerPreInitAction('test-pre-init', function () {
-    assert.ok(true, 'Service should call registered pre-init actions on init.');
+  test('throws when action names are blank', function (assert) {
+    const service = this.owner.lookup('service:i18n');
+
+    assert.throws(function () { service.registerPreInitAction('', function () {}); },
+      'Throws if registered pre-init action name is blank.');
+    assert.throws(function () { service.registerPostInitAction('', function () {}); },
+      'Throws if registered post-init action name is blank.');
+    assert.throws(function() { service.unregisterPreInitAction(''); },
+      'Throws if unregistered pre-init action name is blank.');
+    assert.throws(function () { service.unregisterPostInitAction(''); },
+      'Throws if unregistered post-init action name is blank.');
   });
 
-  service.unregisterPreInitAction('removed-pre-init');
+  test('throws when actions are not functions', function (assert) {
+    const service = this.owner.lookup('service:i18n');
 
-  const done = assert.async();
-  assert.expect(1);
-  service.initLibraryAsync().then(() => {
-    done();
-  });
-});
-
-test('initLibraryAsync triggers post-init actions', function (assert) {
-  const service = this.subject();
-  service.set('i18next', mockI18next);
-
-  service.registerPostInitAction('removed-post-init', function () {
-    // should never get here
-    assert.ok(false, 'Service should not call unregistered actions on init.');
+    assert.throws(function () { service.registerPreInitAction('woo', 'woo'); },
+     'Throws if pre-init action is not a function.');
+    assert.throws(function () { service.registerPostInitAction('woo', 'hoo'); },
+      'Throws if post-init action is not a function.');
   });
 
-  service.registerPostInitAction('test-post-init', function () {
-    assert.ok(true, 'Service should call registered post-init actions on init.');
+  test('initLibraryAsync triggers pre-init actions', function (assert) {
+    const service = this.owner.lookup('service:i18n');
+    service.set('i18next', mockI18next);
+
+    service.registerPreInitAction('removed-pre-init', function () {
+      // should never get here
+      assert.ok(false, 'Service should not call unregistered actions on init.');
+    });
+
+    service.registerPreInitAction('test-pre-init', function () {
+      assert.ok(true, 'Service should call registered pre-init actions on init.');
+    });
+
+    service.unregisterPreInitAction('removed-pre-init');
+
+    const done = assert.async();
+    assert.expect(1);
+    service.initLibraryAsync().then(() => {
+      done();
+    });
   });
 
-  service.unregisterPostInitAction('removed-post-init');
+  test('initLibraryAsync triggers post-init actions', function (assert) {
+    const service = this.owner.lookup('service:i18n');
+    service.set('i18next', mockI18next);
 
-  const done = assert.async();
-  assert.expect(1);
-  service.initLibraryAsync().then(() => {
-    done();
-  });
-});
+    service.registerPostInitAction('removed-post-init', function () {
+      // should never get here
+      assert.ok(false, 'Service should not call unregistered actions on init.');
+    });
 
-test('setting locale triggers pre-init actions', function (assert) {
-  const service = this.subject({
-    _locale: 'en',
-    isInitialized: true
-  });
+    service.registerPostInitAction('test-post-init', function () {
+      assert.ok(true, 'Service should call registered post-init actions on init.');
+    });
 
-  service.set('i18next', mockI18next);
+    service.unregisterPostInitAction('removed-post-init');
 
-  const done = assert.async();
-
-  service.registerPreInitAction('removed-pre-init', () => {
-    // should not get here
-    assert.ok(false, 'Setting locale should not trigger unregistered actions');
+    const done = assert.async();
+    assert.expect(1);
+    service.initLibraryAsync().then(() => {
+      done();
+    });
   });
 
-  service.registerPreInitAction('test-pre-init', (newLang) => {
-    assert.ok(true, 'Setting locale should triggered pre-init actions');
-    assert.strictEqual(newLang, 'th', 'Pre-init\'s newLang is "th"');
+  test('setting locale triggers pre-init actions', function (assert) {
+    const service = this.owner.factoryFor('service:i18n').create({
+      _locale: 'en',
+      isInitialized: true
+    });
+
+    service.set('i18next', mockI18next);
+
+    const done = assert.async();
+
+    service.registerPreInitAction('removed-pre-init', () => {
+      // should not get here
+      assert.ok(false, 'Setting locale should not trigger unregistered actions');
+    });
+
+    service.registerPreInitAction('test-pre-init', (newLang) => {
+      assert.ok(true, 'Setting locale should triggered pre-init actions');
+      assert.strictEqual(newLang, 'th', 'Pre-init\'s newLang is "th"');
+    });
+
+    service.unregisterPreInitAction('removed-pre-init');
+
+    assert.expect(2);
+
+    service._changeLocale('th').then(() => {
+      done();
+    });
   });
 
-  service.unregisterPreInitAction('removed-pre-init');
+  test('setting locale triggers post-init actions', function (assert) {
+    const service = this.owner.factoryFor('service:i18n').create({
+      _locale: 'en',
+      isInitialized: true
+    });
 
-  assert.expect(2);
+    service.set('i18next', mockI18next);
 
-  service._changeLocale('th').then(() => {
-    done();
-  });
-});
+    const done = assert.async();
 
-test('setting locale triggers post-init actions', function (assert) {
-  const service = this.subject({
-    _locale: 'en',
-    isInitialized: true
-  });
+    service.registerPostInitAction('removed-post-init', () => {
+      // should not get here
+      assert.ok(false, 'Setting locale should not trigger unregistered actions');
+    });
 
-  service.set('i18next', mockI18next);
+    service.registerPostInitAction('test-post-init', (oldLang) => {
+      assert.ok(true, 'Setting locale should trigger post-init actions.');
+      assert.strictEqual(oldLang, 'en', 'Post-init\'s oldLang is "en"');
+    });
 
-  const done = assert.async();
+    service.unregisterPostInitAction('removed-post-init');
 
-  service.registerPostInitAction('removed-post-init', () => {
-    // should not get here
-    assert.ok(false, 'Setting locale should not trigger unregistered actions');
-  });
+    assert.expect(2);
 
-  service.registerPostInitAction('test-post-init', (oldLang) => {
-    assert.ok(true, 'Setting locale should trigger post-init actions.');
-    assert.strictEqual(oldLang, 'en', 'Post-init\'s oldLang is "en"');
-  });
-
-  service.unregisterPostInitAction('removed-post-init');
-
-  assert.expect(2);
-
-  service._changeLocale('th').then(() => {
-    done();
+    service._changeLocale('th').then(() => {
+      done();
+    });
   });
 });

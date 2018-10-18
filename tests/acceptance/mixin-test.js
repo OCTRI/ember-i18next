@@ -1,15 +1,9 @@
-import { run } from '@ember/runloop';
+import { visit } from '@ember/test-helpers';
 import { module, test } from 'qunit';
-import startApp from '../helpers/start-app';
-
-var application;
-
-function lookup (name) {
-  return application.__container__.lookup(name);
-}
+import { setupApplicationTest } from 'ember-qunit';
 
 function testTranslation (assert, subject, key, options, expected) {
-  var hash = options || {};
+  const hash = options || {};
   assert.equal(subject.t(key, hash), expected);
 }
 
@@ -18,40 +12,29 @@ function testTranslations (assert, subject) {
   testTranslation(assert, subject, 'test', { lng: 'th' }, 'thai test output');
 }
 
-module('Acceptance: Mixin', {
-  beforeEach() {
-    application = startApp();
-  },
-  afterEach() {
-    run(application, 'destroy');
-  }
-});
+module('Acceptance: Mixin', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('routes with mixin can translate', function(assert) {
-  visit('/');
+  test('routes with mixin can translate', async function(assert) {
+    await visit('/');
 
-  andThen(() => {
-    var indexRoute = lookup('route:index');
+    const indexRoute = this.owner.lookup('route:index');
     assert.ok(indexRoute);
     testTranslations(assert, indexRoute);
   });
-});
 
-test('controllers with mixin can translate', function(assert) {
-  visit('/');
+  test('controllers with mixin can translate', async function(assert) {
+    await visit('/');
 
-  andThen(() => {
-    var controller = lookup('controller:index');
+    const controller = this.owner.lookup('controller:index');
     assert.ok(controller);
     testTranslations(assert, controller);
   });
-});
 
-test('components with mixin can translate', function(assert) {
-  visit('/');
+  test('components with mixin can translate', async function(assert) {
+    await visit('/');
 
-  andThen(() => {
-    var component = lookup('component:t-component');
+    const component = this.owner.lookup('component:t-component');
     assert.ok(component);
     testTranslations(assert, component);
   });
