@@ -6,7 +6,7 @@ var Funnel = require('broccoli-funnel');
 var MergeTrees = require('broccoli-merge-trees');
 
 module.exports = {
-  name: 'ember-i18next',
+  name: require('./package').name,
 
   included() {
     this._super.included.apply(this, arguments);
