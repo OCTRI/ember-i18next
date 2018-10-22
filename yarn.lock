@@ -4191,15 +4191,15 @@ http-proxy@^1.13.1, http-proxy@^1.17.0:
     follow-redirects "^1.0.0"
     requires-port "^1.0.0"
 
-i18next-xhr-backend@^1.4.3:
+i18next-xhr-backend@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/i18next-xhr-backend/-/i18next-xhr-backend-1.5.1.tgz#50282610780c6a696d880dfa7f4ac1d01e8c3ad5"
   integrity sha512-9OLdC/9YxDvTFcgsH5t2BHCODHEotHCa6h7Ly0EUlUC7Y2GS09UeoHOGj3gWKQ3HCqXz8NlH4gOrK3NNc9vPuw==
 
-i18next@^10.0.3:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-10.5.0.tgz#a2a90e67774fa85b8ff9cd0063e697e482440de7"
-  integrity sha512-soHpHN/J8fpkt6z3mEsvO5Uf4huBLk1gYpwK7GwRJOBCJz6Zq4LgMjJ5pr8Lz0+lVwyzKW3zun7+C4pS4LZJ6Q==
+i18next@^11.10.0:
+  version "11.10.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.10.1.tgz#260d1114e94c0eedc330e5bd5624c77387376f19"
+  integrity sha512-cXSA0vc+jmpcQ4EKP+SFQ5WSKwTnEr3j5+SU5E5rpefhvfxSQ5Av5wCWqL7I5b8HJSWEiV9JtzYAMuVvxx7e1A==
 
 iconv-lite@0.4.23:
   version "0.4.23"
