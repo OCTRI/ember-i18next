@@ -1,5 +1,38 @@
 # Changelog
 
+## 3.0.0
+
+Updates dependencies and migrates to use the new Ember testing APIs.
+
+### Breaking
+
+ember-i18next 3.0.0 drops support for Ember 1.13. The addon has been tested with Ember 2.16 LTS, 2.18 LTS and Ember 3.x, but it should work down to version 2.3.
+
+Version 3.0.0 also updates the i18next dependency to version 11, which contains breaking changes. Review [the i18next migration guide](https://www.i18next.com/misc/migration-guide.html) prior to upgrading.
+
+### Changes Included
+
+* PR #56: Use the new Ember testing API.
+* PR #57: Update addon dependency to Ember 3.4.
+* PR #58: Update to the latest i18next and i18next-xhr-backend.
+
+## 2.1.1
+
+Updates dependencies.
+
+### Changes Included
+
+* PR #55: Update addon dependencies.
+
+## 2.1.0 2018/04/24
+
+Updates depdendencies and adds a new computed property macro for translated text. See README.md for details on using the new macro.
+
+### Changes Included
+
+* PR #54: Update addon depdendency to Ember 3.0.
+* PR #52: Add computed property macro.
+
 ## 2.0.0 2018/03/01
 
 Updates dependencies and uses the [Ember.js modules API introduced in Ember 2.16](https://emberjs.com/blog/2017/10/11/ember-2-16-released.html).
