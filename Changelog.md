@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.1
+
+Updates dependencies.
+
+### Changes Included
+
+* PR #60: Update merge to fix prototype pollution vulnerability.
+
 ## 3.0.0
 
 Updates dependencies and migrates to use the new Ember testing APIs.
