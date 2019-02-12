@@ -4,6 +4,8 @@
 
 An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js applications using the [i18next](http://i18next.com/) library. The addon provides an Ember service that wraps i18next and a Handlebars helper for displaying localized text in templates.
 
+## Compatibility
+
 ember-i18next supports current Ember (release, beta, canary) and the last two LTS releases. It may work with releases down to Ember 2.3.
 
 ## Installation
