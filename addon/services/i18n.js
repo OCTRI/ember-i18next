@@ -2,7 +2,6 @@ import { isBlank } from '@ember/utils';
 import { assert } from '@ember/debug';
 import {
   resolve,
-  Promise as EmberPromise,
   hash
 } from 'rsvp';
 import { computed } from '@ember/object';
@@ -44,9 +43,8 @@ const I18nService = Service.extend({
       const lang = value;
 
       if (this.get('isInitialized')) {
-        this._changeLocale(lang).then(lang => {
-          this.set('_locale', lang);
-        });
+        this._changeLocale(lang)
+          .then(lang => this.set('_locale', lang));
       } else {
         this.set('_locale', lang);
       }
@@ -64,18 +62,17 @@ const I18nService = Service.extend({
   initLibraryAsync() {
     const i18next = this.get('i18next');
 
-    return this._runPreInitActions().then(() => {
-      return this._initLibrary();
-    }).then(() => {
-      return this._runPostInitActions();
-    }).then(() => {
-      this.set('_locale', i18next.language);
-      this.set('isInitialized', true);
-      return resolve();
-    }).catch(reason => {
-      // eslint-disable-next-line no-console
-      console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
-    });
+    return this._runPreInitActions()
+      .then(() => this._initLibrary())
+      .then(() => this._runPostInitActions())
+      .then(() => {
+        this.set('_locale', i18next.language);
+        this.set('isInitialized', true);
+        return resolve();
+      }).catch(reason => {
+        // eslint-disable-next-line no-console
+        console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
+      });
   },
 
   /**
@@ -158,16 +155,14 @@ const I18nService = Service.extend({
     }
 
     const oldLang = this._locale;
-    return this._runPreInitActions(lang).then(() => {
-      return this._setLng(lang);
-    }).then(() => {
-      return this._runPostInitActions(oldLang);
-    }).then(() => {
-      return resolve(lang);
-    }).catch(reason => {
-      // eslint-disable-next-line no-console
-      console.warn(`A promise in the locale change path rejected with reason: ${reason}`);
-    });
+    return this._runPreInitActions(lang)
+      .then(() => this._setLng(lang))
+      .then(() => this._runPostInitActions(oldLang))
+      .then(() => resolve(lang))
+      .catch(reason => {
+        // eslint-disable-next-line no-console
+        console.warn(`A promise in the locale change path rejected with reason: ${reason}`);
+      });
   },
 
   /**
@@ -277,36 +272,25 @@ const I18nService = Service.extend({
   },
 
   _initLibrary() {
-    return new EmberPromise((resolve, reject) => {
-      const i18next = this.get('i18next');
-      const options = config.i18nextOptions || {};
+    const i18next = this.get('i18next');
+    const options = config.i18nextOptions || {};
 
-      //
-      //  TODO:  Adding i18nextXHRBackend by default so that translation
-      //         files can be loaded.
-      //         How do we extend this so that other plugins can be added
-      //         dynamically?
-      //
-      i18next
-        .use(i18nextXHRBackend)
-        .init(options, (err) => {
-         if (err) {
-           reject(err);
-         } else {
-           resolve(i18next);
-         }
-      });
-    });
+    //
+    //  TODO:  Adding i18nextXHRBackend by default so that translation
+    //         files can be loaded.
+    //         How do we extend this so that other plugins can be added
+    //         dynamically?
+    //
+    return i18next
+      .use(i18nextXHRBackend)
+      .init(options)
+      .then(() => resolve(i18next));
   },
 
   _setLng(locale) {
     const i18next = this.get('i18next');
-
-    return new EmberPromise(resolve => {
-      i18next.changeLanguage(locale, () => {
-        resolve(locale);
-      });
-    });
+    return i18next.changeLanguage(locale)
+      .then(() => resolve(locale));
   },
 
   _getActionCallHash(actions, lang) {
