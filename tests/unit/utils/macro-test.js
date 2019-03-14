@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { run } from '@ember/runloop';
 import { setupTest } from 'ember-qunit';
+import { settled } from '@ember/test-helpers';
 import { translationMacro as t } from 'ember-i18next';
 import EmberObject from '@ember/object';
 
@@ -35,9 +36,10 @@ module('Unit | Utils | translationMacro', function(hooks) {
     assert.equal(this.object.get('tMacroWithInterpolation'), 'Clicks: 13');
   });
 
-  test('defines a computed property that depends on the locale', function (assert) {
+  test('defines a computed property that depends on the locale', async function (assert) {
     assert.equal(this.object.get('tMacroNoInterpolation'), 'text with no interpolations');
     run(this.object, 'set', 'i18n.locale', 'th');
+    await settled();
     assert.equal(this.object.get('tMacroNoInterpolation'), 'thai text with no interpolations');
   });
 });

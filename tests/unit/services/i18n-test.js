@@ -6,10 +6,16 @@ const mockI18next = {
     return this;
   },
   init(options, cb) {
-    cb();
+    if (cb) {
+      cb();
+    }
+    return Promise.resolve();
   },
   changeLanguage(lng, cb) {
-    cb();
+    if (cb) {
+      cb();
+    }
+    return Promise.resolve();
   }
 };
 
@@ -43,7 +49,7 @@ module('service:i18n', function(hooks) {
       'Throws if post-init action is not a function.');
   });
 
-  test('initLibraryAsync triggers pre-init actions', function (assert) {
+  test('initLibraryAsync triggers pre-init actions', async function (assert) {
     const service = this.owner.lookup('service:i18n');
     service.set('i18next', mockI18next);
 
@@ -58,14 +64,11 @@ module('service:i18n', function(hooks) {
 
     service.unregisterPreInitAction('removed-pre-init');
 
-    const done = assert.async();
     assert.expect(1);
-    service.initLibraryAsync().then(() => {
-      done();
-    });
+    await service.initLibraryAsync();
   });
 
-  test('initLibraryAsync triggers post-init actions', function (assert) {
+  test('initLibraryAsync triggers post-init actions', async function (assert) {
     const service = this.owner.lookup('service:i18n');
     service.set('i18next', mockI18next);
 
@@ -80,22 +83,17 @@ module('service:i18n', function(hooks) {
 
     service.unregisterPostInitAction('removed-post-init');
 
-    const done = assert.async();
     assert.expect(1);
-    service.initLibraryAsync().then(() => {
-      done();
-    });
+    await service.initLibraryAsync();
   });
 
-  test('setting locale triggers pre-init actions', function (assert) {
+  test('setting locale triggers pre-init actions', async function (assert) {
     const service = this.owner.factoryFor('service:i18n').create({
       _locale: 'en',
       isInitialized: true
     });
 
     service.set('i18next', mockI18next);
-
-    const done = assert.async();
 
     service.registerPreInitAction('removed-pre-init', () => {
       // should not get here
@@ -110,21 +108,16 @@ module('service:i18n', function(hooks) {
     service.unregisterPreInitAction('removed-pre-init');
 
     assert.expect(2);
-
-    service._changeLocale('th').then(() => {
-      done();
-    });
+    await service._changeLocale('th');
   });
 
-  test('setting locale triggers post-init actions', function (assert) {
+  test('setting locale triggers post-init actions', async function (assert) {
     const service = this.owner.factoryFor('service:i18n').create({
       _locale: 'en',
       isInitialized: true
     });
 
     service.set('i18next', mockI18next);
-
-    const done = assert.async();
 
     service.registerPostInitAction('removed-post-init', () => {
       // should not get here
@@ -139,9 +132,6 @@ module('service:i18n', function(hooks) {
     service.unregisterPostInitAction('removed-post-init');
 
     assert.expect(2);
-
-    service._changeLocale('th').then(() => {
-      done();
-    });
+    await service._changeLocale('th');
   });
 });
