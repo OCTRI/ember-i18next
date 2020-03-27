@@ -21,7 +21,10 @@ module.exports = {
     browser: true
   },
   rules: {
-    'ember/no-jquery': 'error'
+    'ember/no-jquery': 'error',
+    // disable the following until Octane conversion
+    'ember/no-observers': 'off',
+    'ember/no-new-mixins': 'off'
   },
   overrides: [
     // node files
