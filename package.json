@@ -32,7 +32,7 @@
     "broccoli-merge-trees": "^2.0.0",
     "ember-cli-babel": "^7.18.0",
     "ember-cli-htmlbars": "^4.2.3",
-    "i18next": "^15.0.7",
+    "i18next": "^19.3.4",
     "i18next-xhr-backend": "^2.0.1"
   },
   "devDependencies": {
