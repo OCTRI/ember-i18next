@@ -2,6 +2,7 @@ import { isBlank } from '@ember/utils';
 import { assert } from '@ember/debug';
 import {
   resolve,
+  reject,
   hash
 } from 'rsvp';
 import { computed } from '@ember/object';
@@ -21,6 +22,8 @@ const I18nService = Service.extend({
   _locale: null,
   _preInitActions: null,
   _postInitActions: null,
+
+  _errors: null,
 
   init() {
     this._super(...arguments);
@@ -72,6 +75,7 @@ const I18nService = Service.extend({
       }).catch(reason => {
         // eslint-disable-next-line no-console
         console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
+        return reject(reason);
       });
   },
 
@@ -275,6 +279,8 @@ const I18nService = Service.extend({
     const i18next = this.get('i18next');
     const options = config.i18nextOptions || {};
 
+    let errors;
+
     //
     //  TODO:  Adding i18nextXHRBackend by default so that translation
     //         files can be loaded.
@@ -283,8 +289,17 @@ const I18nService = Service.extend({
     //
     return i18next
       .use(i18nextXHRBackend)
-      .init(options)
-      .then(() => resolve(i18next));
+      .init(options, (err) => {
+        if (err) errors = err;
+      })
+      .then(() => {
+        if (errors) {
+          return reject(errors);
+        }
+        else {
+          return resolve(i18next);
+        }
+      });
   },
 
   _setLng(locale) {
