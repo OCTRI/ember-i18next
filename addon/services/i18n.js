@@ -64,6 +64,7 @@ const I18nService = Service.extend({
    */
   initLibraryAsync() {
     const i18next = this.get('i18next');
+    const options = config.i18nextOptions || {};
 
     return this._runPreInitActions()
       .then(() => this._initLibrary())
@@ -75,7 +76,9 @@ const I18nService = Service.extend({
       }).catch(reason => {
         // eslint-disable-next-line no-console
         console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
-        return reject(reason);
+        if (options.rejectError) {
+          return reject(reason);
+        }
       });
   },
 
