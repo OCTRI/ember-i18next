@@ -43,7 +43,8 @@ let ENV = {
     // any options supported by i18next
     backend: {
       // any options supported by i18next-xhr-backend
-    }
+    },
+    rejectError: false // set to true to catch yourself errors when initializing i18next lib
   },
   APP: {
     // ...
@@ -56,6 +57,26 @@ If you do not specify any options, the default i18next options will be used.
 ### Initializing i18next
 
 To initialize the i18next library, call the i18n service's `initLibraryAsync` method. This method returns a promise that resolves when the library finishes initializing, so if you call it in one of the model hook methods (`beforeModel`, `model`, `afterModel`), the application will enter the loading substate until i18next is initialized. The application route may be a good place to do this.
+
+By default, this addon catch errors and display a warning in console. If you want to catch errors when initializing i18next, set `rejectError` option to true.
+
+```javascript
+// app/routes/application.js
+import Route from '@ember/routing/route';
+
+export default Route.extend({
+  
+  beforeModel() {
+    return this.get('i18n')
+        .initLibraryAsync()
+        // only if `rejectError` option is set to true
+        .catch(
+            errors => this.transitionTo('my-error-page', errors)
+        );
+  }
+
+});
+```
 
 ### Including Locale Files
 
