@@ -6,9 +6,6 @@ on:
       - master
       - "v*"
   pull_request: {}
-  schedule:
-    # run tests daily at 13:19 UTC
-    - cron: '19 13 * * *'
 
 jobs:
   lint:
