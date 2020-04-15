@@ -23,8 +23,6 @@ const I18nService = Service.extend({
   _preInitActions: null,
   _postInitActions: null,
 
-  _errors: null,
-
   init() {
     this._super(...arguments);
     this.set('i18next', i18next);
