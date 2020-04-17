@@ -7,7 +7,7 @@ An [Ember CLI](http://www.ember-cli.com/) addon for internationalizing Ember.js 
 
 ## Compatibility
 
-ember-i18next supports current Ember (release, beta, canary) and the last two LTS releases. It may work with releases down to Ember 2.3.
+ember-i18next supports current Ember (release, beta, canary) and the last two LTS releases.
 
 ## Installation
 
@@ -16,18 +16,6 @@ To install with Ember CLI:
 ```bash
 ember install ember-i18next
 ```
-
-## Upgrading from ember-i18next 1.X
-
-Bower is no longer used to install i18next. If you are still using Bower with your Ember app,  you will need to remove the i18next dependency from `bower.json`.
-
-```diff
-"dependencies": {
--  "i18next": "^3.3.1",
-}
-```
-
-You should review your i18next configuration in `environment.js`, particularly if you have translations with interpolated values. The default interpolation prefix and suffix have changed to `{{`/`}}`, necessitating changes to your JSON files or configuration changes. See the [i18next documentation for interpolation options](https://www.i18next.com/interpolation.html#additional-options).
 
 ## Configuration
 
@@ -44,7 +32,8 @@ let ENV = {
     backend: {
       // any options supported by i18next-xhr-backend
     },
-    rejectError: false // set to true to catch yourself errors when initializing i18next lib
+    // set to true if you want to catch errors when initializing i18next
+    rejectError: false
   },
   APP: {
     // ...
@@ -58,7 +47,9 @@ If you do not specify any options, the default i18next options will be used.
 
 To initialize the i18next library, call the i18n service's `initLibraryAsync` method. This method returns a promise that resolves when the library finishes initializing, so if you call it in one of the model hook methods (`beforeModel`, `model`, `afterModel`), the application will enter the loading substate until i18next is initialized. The application route may be a good place to do this.
 
-By default, this addon catch errors and display a warning in console. If you want to catch errors when initializing i18next, set `rejectError` option to true.
+#### Handling Initialization Errors
+
+By default, this addon will catch any initialization errors and display a warning in the console. If you want to catch and handle the errors, set the `rejectError` option to true and handle the errors in a `catch` block.
 
 ```javascript
 // app/routes/application.js
@@ -68,11 +59,9 @@ export default Route.extend({
   
   beforeModel() {
     return this.get('i18n')
-        .initLibraryAsync()
-        // only if `rejectError` option is set to true
-        .catch(
-            errors => this.transitionTo('my-error-page', errors)
-        );
+      .initLibraryAsync()
+      // only if `rejectError` option is set to true
+      .catch(errors => this.transitionTo('my-error-page', errors));
   }
 
 });
@@ -80,7 +69,7 @@ export default Route.extend({
 
 ### Including Locale Files
 
-By default, i18next loads locale files from the server asynchronously from the server path configured using the XHR backend's [`loadPath`](https://github.com/i18next/i18next-xhr-backend#backend-options) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `ember-cli-build.js` (`Brocfile.js` in earlier versions of ember-cli):
+By default, i18next loads locale files from the server asynchronously from the server path configured using the XHR backend's [`loadPath`](https://github.com/i18next/i18next-xhr-backend#backend-options) configuration option. To copy your application's locale resources from your source tree to the expected path during build, modify the application's `ember-cli-build.js`:
 
 ```javascript
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
@@ -108,7 +97,7 @@ In this example, [Broccoli Funnel](https://github.com/broccolijs/broccoli-funnel
 
 ### Service
 
-If you need to produce translated strings in routes, components or controllers, you can [inject the `i18n` service](https://guides.emberjs.com/v2.18.0/applications/dependency-injection/#toc_ad-hoc-injections). This will then give access to [i18next's `t()` function](https://www.i18next.com/essentials.html) in your code. For example:
+If you need to produce translated strings in routes, components or controllers, you can [inject the `i18n` service](https://guides.emberjs.com/v3.17.0/applications/dependency-injection/#toc_ad-hoc-injections). This will then give access to [i18next's `t()` function](https://www.i18next.com/essentials.html) in your code. For example:
 
 ```javascript
 // app/components/example-component.js
@@ -155,7 +144,7 @@ You can access your app's translations in templates using the `t` helper:
 <button type="button">{{t 'button.text'}}</button>
 ```
 
-Pass values to be interpolated into the translation as [hash arguments](http://handlebarsjs.com/expressions.html). For example, for a translation that includes an interpolated `{{count}}` value:
+Pass values to be interpolated into the translation as [hash arguments](http://handlebarsjs.com/guide/expressions.html#helpers-with-hash-arguments). For example, for a translation that includes an interpolated `{{count}}` value:
 
 ```handlebars
 <div>{{t 'messages.count' count=model.messageCount}}</div>
@@ -265,8 +254,6 @@ moduleForComponent('some-component', 'Integration | Component | some component',
   }
 });
 ```
-
-Alternatively, the [ember-i18n-test-helpers addon](https://github.com/thriqon/ember-i18n-test-helpers) is easy to use and also works well with ember-i18next.
 
 ### Unit Tests
 
