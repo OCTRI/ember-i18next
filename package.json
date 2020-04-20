@@ -1,6 +1,6 @@
 {
   "name": "ember-i18next",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Ember CLI addon that integrates the i18next library.",
   "keywords": [
     "ember-addon",
