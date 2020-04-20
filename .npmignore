@@ -7,12 +7,14 @@
 
 # misc
 /.bowerrc
+/.dependabot/
 /.editorconfig
 /.ember-cli
 /.env*
 /.eslintignore
 /.eslintrc.js
 /.git/
+/.github/
 /.gitignore
 /.template-lintrc.js
 /.travis.yml
