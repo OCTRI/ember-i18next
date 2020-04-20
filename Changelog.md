@@ -1,5 +1,49 @@
 # Changelog
 
+## 5.0.0
+
+Updates dependencies and adds the ability to catch errors thrown during initialization.
+
+### Breaking
+
+ember-i18next 5.0.0 updates the i18next dependency to version 19, which contains breaking changes. Review [the i18next migration guide](https://www.i18next.com/misc/migration-guide.html) prior to upgrading.
+
+### New Features
+
+This release adds the ability to customize the behavior when a promise rejects in `initLibraryAsync`. Previously ember-i18next would only log the error to the console. For compatibility with previous versions, this is still the default behavior. However, you can now handle errors in a catch block if the `rejectError` configuration property is truthy. See the README for details.
+
+Thanks to @mpirio for implementing this.
+
+### Changes Included
+
+* PR #100: Documentation updates.
+* PR #79, #98: Upgrade to latest i18next and i18next-xhr-backend.
+* PR #95: Add configuration property to allow handling errors raised by `initLibraryAsync`. Thanks to @mpirio for this PR.
+* PR #88: Continuous integration changes.
+* Many dependency updates.
+
+
+## 4.0.0
+
+Updates i18next and i18next-xhr-backend. No changes to ember-i18net API.
+
+### Breaking
+
+ember-i18next 4.0.0 contains no changes to the ember-i18next API, but it updates the i18next dependency to version 15, which contains breaking changes. Review [the i18next migration guide](https://www.i18next.com/misc/migration-guide.html) prior to upgrading.
+
+### Changes Included
+
+* PR #62: Upgrade to latest i18next and i18next-xhr-backend. Thanks to @mpirio for this PR.
+* PR #63: Use promises returned by asynchronous i18next method calls.
+
+## 3.0.2
+
+Updates dependencies.
+
+### Changes Included
+
+* PR #61: Update to Ember 3.7.
+
 ## 3.0.1
 
 Updates dependencies.
