@@ -22,6 +22,6 @@ export default Route.extend(I18nMixin, {
 
     changeCount(count) {
       this.get('countObj').set('count', count);
-    }
-  }
+    },
+  },
 });

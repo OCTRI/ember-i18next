@@ -16,15 +16,21 @@ module.exports = {
     this.import('vendor/shims/i18next-xhr-backend.js');
   },
 
-  treeForVendor(vendorTree){
-    var i18nextTree = new Funnel(path.dirname(require.resolve('i18next/i18next.js')), {
-      files: ['i18next.js']
-    });
+  treeForVendor(vendorTree) {
+    var i18nextTree = new Funnel(
+      path.dirname(require.resolve('i18next/i18next.js')),
+      {
+        files: ['i18next.js'],
+      }
+    );
 
-    var backendTree = new Funnel(path.dirname(require.resolve('i18next-xhr-backend/i18nextXHRBackend.js')), {
-      files: ['i18nextXHRBackend.js']
-    });
+    var backendTree = new Funnel(
+      path.dirname(require.resolve('i18next-xhr-backend/i18nextXHRBackend.js')),
+      {
+        files: ['i18nextXHRBackend.js'],
+      }
+    );
 
     return new MergeTrees([vendorTree, i18nextTree, backendTree]);
-  }
+  },
 };

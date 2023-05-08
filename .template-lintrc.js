@@ -5,6 +5,6 @@ module.exports = {
   rules: {
     // disable the following until Octane conversion
     'no-action': false,
-    'no-implicit-this': false
-  }
+    'no-implicit-this': false,
+  },
 };

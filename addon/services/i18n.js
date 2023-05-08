@@ -1,10 +1,6 @@
 import { isBlank } from '@ember/utils';
 import { assert } from '@ember/debug';
-import {
-  resolve,
-  reject,
-  hash
-} from 'rsvp';
+import { resolve, reject, hash } from 'rsvp';
 import { computed } from '@ember/object';
 import Service from '@ember/service';
 import i18next from 'i18next';
@@ -44,14 +40,13 @@ const I18nService = Service.extend({
       const lang = value;
 
       if (this.get('isInitialized')) {
-        this._changeLocale(lang)
-          .then(lang => this.set('_locale', lang));
+        this._changeLocale(lang).then((lang) => this.set('_locale', lang));
       } else {
         this.set('_locale', lang);
       }
 
       return lang;
-    }
+    },
   }),
 
   /**
@@ -71,9 +66,12 @@ const I18nService = Service.extend({
         this.set('_locale', i18next.language);
         this.set('isInitialized', true);
         return resolve();
-      }).catch(reason => {
+      })
+      .catch((reason) => {
         // eslint-disable-next-line no-console
-        console.warn(`A promise in the i18next init chain rejected with reason: ${reason}`);
+        console.warn(
+          `A promise in the i18next init chain rejected with reason: ${reason}`
+        );
         if (options.rejectError) {
           return reject(reason);
         }
@@ -144,7 +142,6 @@ const I18nService = Service.extend({
     delete postInitActions[key];
   },
 
-
   /**
    * Changes the locale, ensuring that pre- and post-init actions run.
    *
@@ -164,9 +161,11 @@ const I18nService = Service.extend({
       .then(() => this._setLng(lang))
       .then(() => this._runPostInitActions(oldLang))
       .then(() => resolve(lang))
-      .catch(reason => {
+      .catch((reason) => {
         // eslint-disable-next-line no-console
-        console.warn(`A promise in the locale change path rejected with reason: ${reason}`);
+        console.warn(
+          `A promise in the locale change path rejected with reason: ${reason}`
+        );
       });
   },
 
@@ -189,7 +188,13 @@ const I18nService = Service.extend({
    * Forwarded to `i18next.addResourceBundle()`.
    */
   addResourceBundle(lang, ns, resources, deep, overwrite) {
-    return this.get('i18next').addResourceBundle(lang, ns, resources, deep, overwrite);
+    return this.get('i18next').addResourceBundle(
+      lang,
+      ns,
+      resources,
+      deep,
+      overwrite
+    );
   },
 
   /**
@@ -273,7 +278,12 @@ const I18nService = Service.extend({
    * Forwarded to `i18next.applyReplacement()`.
    */
   applyReplacement(str, replacementHash, nestedKey, options) {
-    return this.get('i18next').applyReplacement(str, replacementHash, nestedKey, options);
+    return this.get('i18next').applyReplacement(
+      str,
+      replacementHash,
+      nestedKey,
+      options
+    );
   },
 
   _initLibrary() {
@@ -296,8 +306,7 @@ const I18nService = Service.extend({
       .then(() => {
         if (errors) {
           return reject(errors);
-        }
-        else {
+        } else {
           return resolve(i18next);
         }
       });
@@ -305,14 +314,13 @@ const I18nService = Service.extend({
 
   _setLng(locale) {
     const i18next = this.get('i18next');
-    return i18next.changeLanguage(locale)
-      .then(() => resolve(locale));
+    return i18next.changeLanguage(locale).then(() => resolve(locale));
   },
 
   _getActionCallHash(actions, lang) {
     const actionsCallHash = {};
 
-    Object.keys(actions).forEach(key => {
+    Object.keys(actions).forEach((key) => {
       actionsCallHash[key] = actions[key].call(undefined, lang);
     });
 
@@ -331,7 +339,7 @@ const I18nService = Service.extend({
     const actionCalls = this._getActionCallHash(_postInitActions, oldLang);
 
     return hash(actionCalls, 'ember-i18next: post init actions');
-  }
+  },
 });
 
 export default I18nService;

@@ -1,11 +1,14 @@
 import { assert } from '@ember/debug';
 import { computed, get } from '@ember/object';
 
-export default function createTranslatedComputedProperty(key, interpolations = {}) {
-  const values = Object.keys(interpolations).map(key => interpolations[key]);
-  const dependencies = [ 'i18n.locale' ].concat(values);
+export default function createTranslatedComputedProperty(
+  key,
+  interpolations = {}
+) {
+  const values = Object.keys(interpolations).map((key) => interpolations[key]);
+  const dependencies = ['i18n.locale'].concat(values);
 
-  return computed(...dependencies, function() {
+  return computed(...dependencies, 'i18n', function () {
     const i18n = get(this, 'i18n');
     assert(`Cannot translate ${key}. ${this} does not have an i18n.`, i18n);
     return i18n.t(key, mapPropertiesByHash(this, interpolations));
@@ -15,7 +18,7 @@ export default function createTranslatedComputedProperty(key, interpolations = {
 function mapPropertiesByHash(object, hash) {
   const result = {};
 
-  Object.keys(hash).forEach(function(key) {
+  Object.keys(hash).forEach(function (key) {
     result[key] = get(object, hash[key]);
   });
 
