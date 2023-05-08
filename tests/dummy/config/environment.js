@@ -18,16 +18,16 @@ module.exports = function (environment) {
     },
     defaultLocale: 'en',
     i18nextOptions: {
-      ns: [ 'main' ],
+      ns: ['main'],
       defaultNS: 'main',
       useCookie: false,
-      preload: [ 'en', 'th' ],
+      preload: ['en', 'th'],
       lng: 'en',
       fallbackLng: 'en',
       backend: {
-        loadPath: '/locales/{{ns}}/{{lng}}.json'
+        loadPath: '/locales/{{ns}}/{{lng}}.json',
       },
-      debug: true
+      debug: true,
     },
 
     APP: {
@@ -57,7 +57,6 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-
     // here you can enable a production-specific feature
   }
 

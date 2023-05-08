@@ -7,10 +7,10 @@ import EmberObject from '@ember/object';
 
 let service;
 
-module('Unit | Utils | translationMacro', function(hooks) {
+module('Unit | Utils | translationMacro', function (hooks) {
   setupTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     service = this.owner.lookup('service:i18n');
 
     return service.initLibraryAsync().then(() => {
@@ -18,13 +18,18 @@ module('Unit | Utils | translationMacro', function(hooks) {
         i18n: service,
         numberClicks: 9,
         tMacroNoInterpolation: t('macro_no_interpolations'),
-        tMacroWithInterpolation: t('macro_with_interpolations', { clicks: 'numberClicks' })
+        tMacroWithInterpolation: t('macro_with_interpolations', {
+          clicks: 'numberClicks',
+        }),
       }).create();
-    })
+    });
   });
 
   test('defines a computed property that translates without interpolations', function (assert) {
-    assert.equal(this.object.get('tMacroNoInterpolation'), 'text with no interpolations');
+    assert.equal(
+      this.object.get('tMacroNoInterpolation'),
+      'text with no interpolations'
+    );
   });
 
   test('defines a computed property that translates with interpolations', function (assert) {
@@ -37,9 +42,15 @@ module('Unit | Utils | translationMacro', function(hooks) {
   });
 
   test('defines a computed property that depends on the locale', async function (assert) {
-    assert.equal(this.object.get('tMacroNoInterpolation'), 'text with no interpolations');
+    assert.equal(
+      this.object.get('tMacroNoInterpolation'),
+      'text with no interpolations'
+    );
     run(this.object, 'set', 'i18n.locale', 'th');
     await settled();
-    assert.equal(this.object.get('tMacroNoInterpolation'), 'thai text with no interpolations');
+    assert.equal(
+      this.object.get('tMacroNoInterpolation'),
+      'thai text with no interpolations'
+    );
   });
 });

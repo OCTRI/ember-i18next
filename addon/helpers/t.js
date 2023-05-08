@@ -31,5 +31,5 @@ export default Helper.extend({
 
   refreshText: observer('i18n._locale', function () {
     this.recompute();
-  })
+  }),
 });

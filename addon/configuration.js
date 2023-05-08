@@ -9,5 +9,5 @@ export default {
 
   load(config) {
     this.i18nextOptions = config;
-  }
+  },
 };

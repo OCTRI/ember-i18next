@@ -5,5 +5,5 @@ export default Route.extend(I18nMixin, {
   beforeModel() {
     const i18next = this.get('i18n');
     return i18next.initLibraryAsync();
-  }
+  },
 });

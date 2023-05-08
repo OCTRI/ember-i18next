@@ -15,7 +15,7 @@ const I18nMixin = Mixin.create({
 
   t(path, values) {
     return this.get('i18n').t(path, values);
-  }
+  },
 });
 
 export default I18nMixin;
