@@ -17,15 +17,20 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
     'ember/no-jquery': 'error',
     // disable the following until Octane conversion
+    'ember/no-actions-hash': 'off',
+    'ember/no-classic-classes': 'off',
+    'ember/no-classic-components': 'off',
+    'ember/no-get': 'off',
+    'ember/no-mixins': 'off',
+    'ember/no-new-mixins': 'off',
     'ember/no-observers': 'off',
-    'ember/no-new-mixins': 'off'
+    'ember/require-tagless-components': 'off',
   },
-  rules: {},
   overrides: [
     // node files
     {
@@ -38,6 +43,7 @@ module.exports = {
         './testem.js',
         './blueprints/*/index.js',
         './config/**/*.js',
+        './tests/.eslintrc.js',
         './tests/dummy/config/**/*.js',
       ],
       parserOptions: {
