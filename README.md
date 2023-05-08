@@ -56,7 +56,7 @@ By default, this addon will catch any initialization errors and display a warnin
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  
+
   beforeModel() {
     return this.get('i18n')
       .initLibraryAsync()
