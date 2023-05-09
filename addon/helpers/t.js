@@ -1,5 +1,5 @@
 import { observer } from '@ember/object';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { inject as service } from '@ember/service';
 import Helper from '@ember/component/helper';
 
