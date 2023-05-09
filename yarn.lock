@@ -4656,9 +4656,9 @@ eslint-plugin-prettier@^4.2.1:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-qunit@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-qunit/-/eslint-plugin-qunit-6.2.0.tgz"
+eslint-plugin-qunit@^7.3.4:
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-qunit/-/eslint-plugin-qunit-7.3.4.tgz#2465b6f29ff56fbe9b741bde2740dec109ee9bec"
   dependencies:
     eslint-utils "^3.0.0"
     requireindex "^1.2.0"
